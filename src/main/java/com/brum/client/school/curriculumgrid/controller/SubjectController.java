@@ -35,7 +35,7 @@ public class SubjectController {
 	public ResponseEntity<Boolean> create(@RequestBody Subject subject) {
 		Boolean isSubjectCreated = this.subjectService.create(subject);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(isSubjectCreated);
+		return ResponseEntity.status(HttpStatus.CREATED).body(isSubjectCreated);
 	}
 	
 	@GetMapping("/{id}")
@@ -46,7 +46,7 @@ public class SubjectController {
 		return ResponseEntity.status(HttpStatus.OK).body(subject);
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping
 	public ResponseEntity<Subject> update(@RequestBody Subject subject) {
 		
 		Subject subjectAltered = this.subjectService.update(subject);

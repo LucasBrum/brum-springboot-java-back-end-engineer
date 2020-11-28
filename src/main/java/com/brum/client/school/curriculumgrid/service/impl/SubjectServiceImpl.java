@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.brum.client.school.curriculumgrid.entity.Subject;
+import com.brum.client.school.curriculumgrid.exception.SubjectException;
 import com.brum.client.school.curriculumgrid.repository.SubjectRepository;
 import com.brum.client.school.curriculumgrid.service.SubjectService;
 
@@ -21,7 +23,8 @@ public class SubjectServiceImpl implements SubjectService{
 	public Subject update(Subject subject) {
 		
 		try {
-			Subject subjectUpdated = this.subjectRepository.findById(subject.getId()).get();
+			
+			Subject subjectUpdated = this.findById(subject.getId());
 			
 			subjectUpdated.setName(subject.getName());
 			subjectUpdated.setCode(subject.getCode());
@@ -31,6 +34,9 @@ public class SubjectServiceImpl implements SubjectService{
 			this.subjectRepository.save(subjectUpdated);
 			
 			return subjectUpdated;
+			
+		} catch (SubjectException subjectException) {
+			throw subjectException;
 		} catch (Exception e) {
 			return null;
 		}
@@ -40,8 +46,11 @@ public class SubjectServiceImpl implements SubjectService{
 	@Override
 	public Boolean delete(Long id) {
 		try {
+			this.findById(id);
 			this.subjectRepository.deleteById(id);
 			return true;
+		} catch (SubjectException subjectException) {
+			throw subjectException;
 		} catch (Exception e) {
 			return false;
 		}
@@ -50,7 +59,6 @@ public class SubjectServiceImpl implements SubjectService{
 	@Override
 	public Boolean create(Subject subject) {
 		try {
-			
 			this.subjectRepository.save(subject);
 			return true;
 		} catch (Exception e) {
@@ -63,13 +71,17 @@ public class SubjectServiceImpl implements SubjectService{
 		try {
 			
 			Optional<Subject> subject = subjectRepository.findById(id);
+			
 			if(subject.isPresent()) {
 				return subject.get();
 			}
-			return null;
 			
+			throw new SubjectException("Subject Not Found.", HttpStatus.NOT_FOUND);
+			
+		} catch (SubjectException subjectException) {
+			throw subjectException;
 		} catch (Exception e) {
-			return null;
+			throw new SubjectException("Internal error identified. Please contact customer support.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
