@@ -2,17 +2,17 @@ package com.brum.client.school.curriculumgrid.service;
 
 import java.util.List;
 
-import com.brum.client.school.curriculumgrid.entity.Subject;
+import com.brum.client.school.curriculumgrid.dto.SubjectDto;
 
 public interface SubjectService {
 
-	public Boolean create(Subject subject);
+	public Boolean create(SubjectDto subjectDto);
 	
-	public Subject findById(Long id);
+	public SubjectDto findById(Long id);
 	
-	public List<Subject> listAll();
+	public List<SubjectDto> listAll();
 	
-	public Subject update(Subject subject);
+	public Boolean update(SubjectDto subjectDto);
 	
 	public Boolean delete(Long id);
 }

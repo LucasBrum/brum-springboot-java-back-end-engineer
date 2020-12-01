@@ -2,6 +2,8 @@ package com.brum.client.school.curriculumgrid.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.brum.client.school.curriculumgrid.dto.SubjectDto;
 import com.brum.client.school.curriculumgrid.entity.Subject;
 import com.brum.client.school.curriculumgrid.service.SubjectService;
 
@@ -25,33 +28,33 @@ public class SubjectController {
 	private SubjectService subjectService;
 	
 	@GetMapping
-	public ResponseEntity<List<Subject>> listAll() {
-		List<Subject> listSubjects = this.subjectService.listAll();
+	public ResponseEntity<List<SubjectDto>> listAll() {
+		List<SubjectDto> listSubjects = this.subjectService.listAll();
 		return ResponseEntity.status(HttpStatus.OK).body(listSubjects);
 		
 	}
 	
 	@PostMapping
-	public ResponseEntity<Boolean> create(@RequestBody Subject subject) {
-		Boolean isSubjectCreated = this.subjectService.create(subject);
+	public ResponseEntity<Boolean> create(@Valid @RequestBody SubjectDto subjectDto) {
+		Boolean isSubjectCreated = this.subjectService.create(subjectDto);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(isSubjectCreated);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Subject> findById(@PathVariable Long id) {
+	public ResponseEntity<SubjectDto> findById(@PathVariable Long id) {
 		
-		Subject subject = this.subjectService.findById(id);
+		SubjectDto subjectDto = this.subjectService.findById(id);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(subject);
+		return ResponseEntity.status(HttpStatus.OK).body(subjectDto);
 	}
 	
 	@PutMapping
-	public ResponseEntity<Subject> update(@RequestBody Subject subject) {
+	public ResponseEntity<Boolean> update(@Valid @RequestBody SubjectDto subjectDto) {
 		
-		Subject subjectAltered = this.subjectService.update(subject);
+		Boolean isSubjectUpdated = this.subjectService.update(subjectDto);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(subjectAltered);
+		return ResponseEntity.status(HttpStatus.OK).body(isSubjectUpdated);
 		
 	}
 	

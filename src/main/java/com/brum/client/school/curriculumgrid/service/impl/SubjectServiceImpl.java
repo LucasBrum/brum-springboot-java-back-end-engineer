@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.brum.client.school.curriculumgrid.dto.SubjectDto;
 import com.brum.client.school.curriculumgrid.entity.Subject;
 import com.brum.client.school.curriculumgrid.exception.SubjectException;
 import com.brum.client.school.curriculumgrid.repository.SubjectRepository;
@@ -20,20 +23,18 @@ public class SubjectServiceImpl implements SubjectService{
 	private SubjectRepository subjectRepository;
 	
 	@Override
-	public Subject update(Subject subject) {
+	public Boolean update(SubjectDto subjectDto) {
 		
 		try {
 			
-			Subject subjectUpdated = this.findById(subject.getId());
+			this.findById(subjectDto.getId());
 			
-			subjectUpdated.setName(subject.getName());
-			subjectUpdated.setCode(subject.getCode());
-			subjectUpdated.setHours(subject.getHours());
-			subjectUpdated.setFrequency(subject.getFrequency());
+			ModelMapper mapper = new ModelMapper();
+			Subject subjectUpdated = mapper.map(subjectDto, Subject.class);
 			
 			this.subjectRepository.save(subjectUpdated);
 			
-			return subjectUpdated;
+			return true;
 			
 		} catch (SubjectException subjectException) {
 			throw subjectException;
@@ -57,9 +58,14 @@ public class SubjectServiceImpl implements SubjectService{
 	}
 
 	@Override
-	public Boolean create(Subject subject) {
+	public Boolean create(SubjectDto subjectDto) {
 		try {
+			
+			ModelMapper mapper = new ModelMapper();
+			Subject subject = mapper.map(subjectDto, Subject.class);
+			
 			this.subjectRepository.save(subject);
+			
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -67,13 +73,16 @@ public class SubjectServiceImpl implements SubjectService{
 	}
 
 	@Override
-	public Subject findById(Long id) {
+	public SubjectDto findById(Long id) {
 		try {
 			
+			ModelMapper mapper = new ModelMapper();
 			Optional<Subject> subject = subjectRepository.findById(id);
 			
 			if(subject.isPresent()) {
-				return subject.get();
+				
+				return mapper.map(subject.get(), SubjectDto.class);
+				
 			}
 			
 			throw new SubjectException("Subject Not Found.", HttpStatus.NOT_FOUND);
@@ -86,9 +95,14 @@ public class SubjectServiceImpl implements SubjectService{
 	}
 
 	@Override
-	public List<Subject> listAll() {
+	public List<SubjectDto> listAll() {
 		try {
-			return this.subjectRepository.findAll();
+			ModelMapper mapper = new ModelMapper();
+			
+			List<Subject> subjectList = this.subjectRepository.findAll();
+			
+			return mapper.map(subjectList,new TypeToken<List<SubjectDto>>() {}.getType());
+			
 		} catch (Exception e) {
 			return new ArrayList<>();
 		}
