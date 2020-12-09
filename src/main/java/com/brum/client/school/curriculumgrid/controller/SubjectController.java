@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brum.client.school.curriculumgrid.dto.SubjectDto;
-import com.brum.client.school.curriculumgrid.entity.Subject;
 import com.brum.client.school.curriculumgrid.service.SubjectService;
 
 @RestController
