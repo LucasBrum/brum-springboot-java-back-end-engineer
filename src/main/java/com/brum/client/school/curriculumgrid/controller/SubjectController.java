@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.brum.client.school.curriculumgrid.constant.HyperLinkConstant;
 import com.brum.client.school.curriculumgrid.dto.SubjectDto;
 import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.service.SubjectService;
@@ -24,10 +25,6 @@ import com.brum.client.school.curriculumgrid.service.SubjectService;
 @RestController
 @RequestMapping("/subjects")
 public class SubjectController {
-
-	private static final String DELETE = "DELETE";
-	
-	private static final String UPDATE = "UPDATE";
 	
 	@Autowired
 	private SubjectService subjectService;
@@ -63,8 +60,8 @@ public class SubjectController {
 		response.setData(subjectDto);
 		response.setStatusCode(HttpStatus.OK.value());
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).findById(id)).withSelfRel());
-		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).delete(id)).withRel(DELETE));
-		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).update(subjectDto)).withRel(UPDATE));
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).delete(id)).withRel(HyperLinkConstant.DELETE.getValue()));
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).update(subjectDto)).withRel(HyperLinkConstant.DELETE.getValue()));
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
@@ -83,6 +80,28 @@ public class SubjectController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(this.subjectService.delete(id));
 		
+	}
+	
+	@GetMapping("/min-hour/{minHour}")
+	public ResponseEntity<Response<List<SubjectDto>>> findByMinHour(@PathVariable int minHour) {
+		
+		Response<List<SubjectDto>> response = new Response<>();
+		List<SubjectDto> subjectsList = this.subjectService.findByMinHour(minHour);
+		
+		response.setData(subjectsList);
+		response.setStatusCode(HttpStatus.OK.value());
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
+	public ResponseEntity<Response<List<SubjectDto>>> findByFrequency(@PathVariable int frequency) {
+		Response<List<SubjectDto>> response = new Response<>();
+		List<SubjectDto> subjectsList = this.subjectService.findByFrequency(frequency);
+		
+		response.setData(subjectsList);
+		response.setStatusCode(HttpStatus.OK.value());
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
 }

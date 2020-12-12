@@ -114,18 +114,40 @@ public class SubjectServiceImpl implements SubjectService {
 		try {
 			List<Subject> subjectList = this.subjectRepository.findAll();
 
-			List<SubjectDto> subjectDto = this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
+			List<SubjectDto> subjectDtosList = this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
 			}.getType());
 
-			subjectDto.forEach(subject -> 
+			subjectDtosList.forEach(subject -> 
 				subject.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).findById(subject.getId())).withSelfRel()));
 			
 			
-			return subjectDto;
+			return subjectDtosList;
 
 		} catch (Exception e) {
 			throw new SubjectException(MENSAGEM_ERRO,
 					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@Override
+	public List<SubjectDto> findByMinHour(int minHour) {
+		try {
+			List<Subject> subjectList = this.subjectRepository.findByMinHour(minHour);
+			
+			return this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {}.getType());
+		} catch (Exception e) {
+			throw new SubjectException(MENSAGEM_ERRO, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@Override
+	public List<SubjectDto> findByFrequency(int frequency) {
+		try {
+			List<Subject> subjectList = this.subjectRepository.findByFrequencyEqualOne(frequency);
+			
+			return this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {}.getType());
+		} catch (Exception e) {
+			throw new SubjectException(MENSAGEM_ERRO, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

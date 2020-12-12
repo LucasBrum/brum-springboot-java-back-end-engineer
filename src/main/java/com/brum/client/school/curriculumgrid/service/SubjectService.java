@@ -15,4 +15,8 @@ public interface SubjectService {
 	public Boolean update(SubjectDto subjectDto);
 	
 	public Boolean delete(Long id);
+
+	public List<SubjectDto> findByMinHour(int minHour);
+
+	public List<SubjectDto> findByFrequency(int frequency);
 }
