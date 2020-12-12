@@ -6,6 +6,10 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +19,7 @@ import com.brum.client.school.curriculumgrid.exception.SubjectException;
 import com.brum.client.school.curriculumgrid.repository.SubjectRepository;
 import com.brum.client.school.curriculumgrid.service.SubjectService;
 
+@CacheConfig(cacheNames = "subject")
 @Service
 public class SubjectServiceImpl implements SubjectService {
 	private static final String MENSAGEM_ERRO = "Internal error identified. Please contact customer support.";
@@ -31,13 +36,13 @@ public class SubjectServiceImpl implements SubjectService {
 	}
 
 	@Override
-	public Boolean update(SubjectDto subjectDto) {
+	public Boolean update(SubjectDto subject) {
 
 		try {
 
-			this.findById(subjectDto.getId());
+			this.findById(subject.getId());
 
-			Subject subjectUpdated = this.mapper.map(subjectDto, Subject.class);
+			Subject subjectUpdated = this.mapper.map(subject, Subject.class);
 
 			this.subjectRepository.save(subjectUpdated);
 
@@ -46,7 +51,7 @@ public class SubjectServiceImpl implements SubjectService {
 		} catch (SubjectException subjectException) {
 			throw subjectException;
 		} catch (Exception e) {
-			return null;
+			throw e;
 		}
 
 	}
@@ -79,8 +84,9 @@ public class SubjectServiceImpl implements SubjectService {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
 	@Override
+	@CachePut(key = "#id")
 	public SubjectDto findById(Long id) {
 		try {
 
@@ -101,7 +107,8 @@ public class SubjectServiceImpl implements SubjectService {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
+	
+	@CachePut(unless = "#result.size() < 3")
 	@Override
 	public List<SubjectDto> listAll() {
 		try {
