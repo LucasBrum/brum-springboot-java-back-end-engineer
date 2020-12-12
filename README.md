@@ -5,5 +5,6 @@ Microservice responsible for curriculum grid maintenance
 - Springboot
 - Cache
 - H2
+- HATEOAS
 
 
