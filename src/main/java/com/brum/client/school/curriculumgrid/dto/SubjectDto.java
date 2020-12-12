@@ -4,12 +4,16 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class SubjectDto {
+@EqualsAndHashCode(callSuper = false)
+public class SubjectDto extends RepresentationModel<SubjectDto>{
 	
 	private Long id;
 	

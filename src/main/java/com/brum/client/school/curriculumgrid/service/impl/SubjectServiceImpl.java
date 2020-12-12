@@ -7,12 +7,12 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.brum.client.school.curriculumgrid.controller.SubjectController;
 import com.brum.client.school.curriculumgrid.dto.SubjectDto;
 import com.brum.client.school.curriculumgrid.entity.Subject;
 import com.brum.client.school.curriculumgrid.exception.SubjectException;
@@ -114,8 +114,14 @@ public class SubjectServiceImpl implements SubjectService {
 		try {
 			List<Subject> subjectList = this.subjectRepository.findAll();
 
-			return this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
+			List<SubjectDto> subjectDto = this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
 			}.getType());
+
+			subjectDto.forEach(subject -> 
+				subject.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).findById(subject.getId())).withSelfRel()));
+			
+			
+			return subjectDto;
 
 		} catch (Exception e) {
 			throw new SubjectException(MENSAGEM_ERRO,

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,19 +18,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brum.client.school.curriculumgrid.dto.SubjectDto;
+import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.service.SubjectService;
 
 @RestController
 @RequestMapping("/subjects")
 public class SubjectController {
 
+	private static final String DELETE = "DELETE";
+	
+	private static final String UPDATE = "UPDATE";
+	
 	@Autowired
 	private SubjectService subjectService;
 	
 	@GetMapping
-	public ResponseEntity<List<SubjectDto>> listAll() {
+	public ResponseEntity<Response<List<SubjectDto>>> listAll() {
+		
 		List<SubjectDto> listSubjects = this.subjectService.listAll();
-		return ResponseEntity.status(HttpStatus.OK).body(listSubjects);
+
+		Response<List<SubjectDto>> response = new Response<>();
+		
+		response.setData(listSubjects);
+		response.setStatusCode(HttpStatus.OK.value());
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).listAll()).withSelfRel());
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 		
 	}
 	
@@ -41,11 +55,18 @@ public class SubjectController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<SubjectDto> findById(@PathVariable Long id) {
+	public ResponseEntity<Response<SubjectDto>> findById(@PathVariable Long id) {
 		
 		SubjectDto subjectDto = this.subjectService.findById(id);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(subjectDto);
+		Response<SubjectDto> response = new Response<>();
+		response.setData(subjectDto);
+		response.setStatusCode(HttpStatus.OK.value());
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).findById(id)).withSelfRel());
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).delete(id)).withRel(DELETE));
+		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).update(subjectDto)).withRel(UPDATE));
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
 	@PutMapping
@@ -58,9 +79,9 @@ public class SubjectController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public void delete(@PathVariable Long id) {
+	public ResponseEntity<Boolean> delete(@PathVariable Long id) {
 		
-		this.subjectService.delete(id);
+		return ResponseEntity.status(HttpStatus.OK).body(this.subjectService.delete(id));
 		
 	}
 	
