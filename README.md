@@ -2,8 +2,8 @@
 Microservice responsible for curriculum grid maintenance
 
 ## Stack:
-Springboot
-Cache
-H2
+- Springboot
+- Cache
+- H2
 
 
