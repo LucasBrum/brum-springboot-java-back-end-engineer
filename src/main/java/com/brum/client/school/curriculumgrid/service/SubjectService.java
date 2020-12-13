@@ -8,13 +8,13 @@ public interface SubjectService {
 
 	public Boolean create(SubjectDto subjectDto);
 	
-	public SubjectDto findById(Long id);
-	
-	public List<SubjectDto> listAll();
-	
 	public Boolean update(SubjectDto subjectDto);
 	
 	public Boolean delete(Long id);
+	
+	public SubjectDto findById(Long id);
+	
+	public List<SubjectDto> listAll();
 
 	public List<SubjectDto> findByMinHour(int minHour);
 

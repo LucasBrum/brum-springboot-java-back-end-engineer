@@ -1,4 +1,4 @@
-package com.brum.client.school.curriculumgrid.constant;
+package com.brum.client.school.curriculumgrid.enums;
 
 import lombok.Getter;
 

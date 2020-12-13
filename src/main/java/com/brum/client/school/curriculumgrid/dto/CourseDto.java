@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CursoDto {
+public class CourseDto {
+	
+	private Long id;
 	
 	@Size(min = 10, max = 30)
 	@NotBlank(message = "Enter the Course name")
@@ -18,7 +20,7 @@ public class CursoDto {
 	
 	@Size(min = 2, max = 5)
 	@NotBlank(message = "Enter the Course code")
-	private String courseCode;
+	private String code;
 	
 	private List<Long> subjects;
 }

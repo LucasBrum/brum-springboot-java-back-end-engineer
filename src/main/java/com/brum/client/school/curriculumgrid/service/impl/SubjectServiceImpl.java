@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.brum.client.school.curriculumgrid.controller.SubjectController;
 import com.brum.client.school.curriculumgrid.dto.SubjectDto;
 import com.brum.client.school.curriculumgrid.entity.Subject;
+import com.brum.client.school.curriculumgrid.enums.ExceptionMessageEnum;
 import com.brum.client.school.curriculumgrid.exception.SubjectException;
 import com.brum.client.school.curriculumgrid.repository.SubjectRepository;
 import com.brum.client.school.curriculumgrid.service.SubjectService;
@@ -22,8 +23,7 @@ import com.brum.client.school.curriculumgrid.service.SubjectService;
 @CacheConfig(cacheNames = "subject")
 @Service
 public class SubjectServiceImpl implements SubjectService {
-	private static final String MENSAGEM_ERRO = "Internal error identified. Please contact customer support.";
-	private static final String SUBJECT_NOT_FOUND = "Subject Not Found.";
+
 	private ModelMapper mapper;
 
 	@Autowired
@@ -33,6 +33,20 @@ public class SubjectServiceImpl implements SubjectService {
 	public SubjectServiceImpl(SubjectRepository subjectRepository) {
 		this.mapper = new ModelMapper();
 		this.subjectRepository = subjectRepository;
+	}
+
+	@Override
+	public Boolean create(SubjectDto subjectDto) {
+		try {
+
+			Subject subject = this.mapper.map(subjectDto, Subject.class);
+
+			this.subjectRepository.save(subject);
+
+			return Boolean.TRUE;
+		} catch (Exception e) {
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@Override
@@ -65,26 +79,10 @@ public class SubjectServiceImpl implements SubjectService {
 		} catch (SubjectException subjectException) {
 			throw subjectException;
 		} catch (Exception e) {
-			throw new SubjectException(MENSAGEM_ERRO,
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@Override
-	public Boolean create(SubjectDto subjectDto) {
-		try {
-
-			Subject subject = this.mapper.map(subjectDto, Subject.class);
-
-			this.subjectRepository.save(subject);
-
-			return Boolean.TRUE;
-		} catch (Exception e) {
-			throw new SubjectException(MENSAGEM_ERRO,
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
 	@Override
 	@CachePut(key = "#id")
 	public SubjectDto findById(Long id) {
@@ -98,18 +96,17 @@ public class SubjectServiceImpl implements SubjectService {
 
 			}
 
-			throw new SubjectException(SUBJECT_NOT_FOUND, HttpStatus.NOT_FOUND);
+			throw new SubjectException(ExceptionMessageEnum.SUBJECT_NOT_FOUND.getValue(), HttpStatus.NOT_FOUND);
 
 		} catch (SubjectException subjectException) {
 			throw subjectException;
 		} catch (Exception e) {
-			throw new SubjectException(MENSAGEM_ERRO,
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	@CachePut(unless = "#result.size() < 3")
+
 	@Override
+	@CachePut(unless = "#result.size() < 3")
 	public List<SubjectDto> listAll() {
 		try {
 			List<Subject> subjectList = this.subjectRepository.findAll();
@@ -117,15 +114,14 @@ public class SubjectServiceImpl implements SubjectService {
 			List<SubjectDto> subjectDtosList = this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
 			}.getType());
 
-			subjectDtosList.forEach(subject -> 
-				subject.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).findById(subject.getId())).withSelfRel()));
-			
-			
+			subjectDtosList.forEach(subject -> subject.add(WebMvcLinkBuilder
+					.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).findById(subject.getId()))
+					.withSelfRel()));
+
 			return subjectDtosList;
 
 		} catch (Exception e) {
-			throw new SubjectException(MENSAGEM_ERRO,
-					HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -133,10 +129,11 @@ public class SubjectServiceImpl implements SubjectService {
 	public List<SubjectDto> findByMinHour(int minHour) {
 		try {
 			List<Subject> subjectList = this.subjectRepository.findByMinHour(minHour);
-			
-			return this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {}.getType());
+
+			return this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
+			}.getType());
 		} catch (Exception e) {
-			throw new SubjectException(MENSAGEM_ERRO, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -144,10 +141,11 @@ public class SubjectServiceImpl implements SubjectService {
 	public List<SubjectDto> findByFrequency(int frequency) {
 		try {
 			List<Subject> subjectList = this.subjectRepository.findByFrequencyEqualOne(frequency);
-			
-			return this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {}.getType());
+
+			return this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
+			}.getType());
 		} catch (Exception e) {
-			throw new SubjectException(MENSAGEM_ERRO, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

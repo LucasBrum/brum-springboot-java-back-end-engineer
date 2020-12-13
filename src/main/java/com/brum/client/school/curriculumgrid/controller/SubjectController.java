@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.brum.client.school.curriculumgrid.constant.HyperLinkConstant;
 import com.brum.client.school.curriculumgrid.dto.SubjectDto;
+import com.brum.client.school.curriculumgrid.enums.HyperLinkConstant;
 import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.service.SubjectService;
 
