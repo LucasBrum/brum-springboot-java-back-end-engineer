@@ -15,7 +15,7 @@ public interface CourseService {
 	
 	public List<Course> listAll();
 	
-	public List<CourseDto> findByCode(String code);
+	public Course findByCode(String code);
 	
 	public CourseDto findById(Long id);
 	

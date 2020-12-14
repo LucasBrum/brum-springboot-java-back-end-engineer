@@ -65,6 +65,17 @@ public class CourseController {
 		
 	}
 	
+	@GetMapping("/code/{code}")
+	public ResponseEntity<Response<Course>> findByCode(@PathVariable String code) {
+		Course course = this.courseService.findByCode(code);
+		
+		Response<Course> response = new Response<>();
+		response.setData(course);
+		response.setStatusCode(HttpStatus.OK.value());
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+	
 	@PutMapping
 	public ResponseEntity<Boolean> update(@Valid @RequestBody CourseDto courseDto) {
 		Boolean isCourseUpdated = this.courseService.update(courseDto);

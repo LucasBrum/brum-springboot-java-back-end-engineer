@@ -105,14 +105,11 @@ public class CourseServiceImpl implements CourseService {
 	}
 	
 	@Override
-	public List<CourseDto> findByCode(String code) {
+	public Course findByCode(String code) {
 		try {
-			List<Course> courseList = this.courseRepository.findByCode(code);
 			
-			List<CourseDto> courseDtosList = this.mapper.map(courseList, new TypeToken<List<CourseDto>>()
-					{}.getType());
+			return this.courseRepository.findByCode(code);
 			
-			return courseDtosList;
 		} catch (Exception e) {
 			throw new CourseException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
