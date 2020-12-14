@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
@@ -64,11 +65,11 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public Boolean update(CourseDto course) {
 		try {
-			this.findById(course.getId());
+			Course courseSaved = this.findById(course.getId());
 			
-			Course courseUpdated = this.mapper.map(course, Course.class);
+			BeanUtils.copyProperties(course, courseSaved, "id");
 			
-			this.courseRepository.save(courseUpdated);
+			this.courseRepository.save(courseSaved);
 			
 			return Boolean.TRUE;
 			
@@ -116,12 +117,12 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	@CachePut(key = "#id")
-	public CourseDto findById(Long id) {
+	public Course findById(Long id) {
 		try {
 			Optional<Course> courseOptional = this.courseRepository.findById(id);
 			
 			if (courseOptional.isPresent()) {
-				return this.mapper.map(courseOptional.get(), CourseDto.class);
+				return courseOptional.get();
 			}
 			
 			throw new CourseException(ExceptionMessageEnum.COURSE_NOT_FOUND.getValue(), HttpStatus.NOT_FOUND);

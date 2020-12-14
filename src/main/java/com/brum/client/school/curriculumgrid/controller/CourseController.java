@@ -53,12 +53,12 @@ public class CourseController {
 	
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Response<CourseDto>> findById(@PathVariable Long id) {
+	public ResponseEntity<Response<Course>> findById(@PathVariable Long id) {
 		
-		CourseDto courseDto = this.courseService.findById(id);
+		Course course = this.courseService.findById(id);
 		
-		Response<CourseDto> response = new Response<>();
-		response.setData(courseDto);
+		Response<Course> response = new Response<>();
+		response.setData(course);
 		response.setStatusCode(HttpStatus.OK.value());
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);
