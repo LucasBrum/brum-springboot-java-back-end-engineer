@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brum.client.school.curriculumgrid.dto.CourseDto;
+import com.brum.client.school.curriculumgrid.entity.Course;
 import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.service.CourseService;
 
@@ -29,12 +30,12 @@ public class CourseController {
 	
 	
 	@GetMapping
-	public ResponseEntity<Response<List<CourseDto>>> listAll() {
-		List<CourseDto> courseDtosList = this.courseService.listAll();
+	public ResponseEntity<Response<List<Course>>> listAll() {
+		List<Course> coursesList = this.courseService.listAll();
 		
-		Response<List<CourseDto>> response = new Response<>();
+		Response<List<Course>> response = new Response<>();
 		
-		response.setData(courseDtosList);
+		response.setData(coursesList);
 		response.setStatusCode(HttpStatus.OK.value());
 		
 		return ResponseEntity.status(HttpStatus.OK).body(response);

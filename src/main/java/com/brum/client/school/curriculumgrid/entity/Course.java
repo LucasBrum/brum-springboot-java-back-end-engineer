@@ -42,7 +42,7 @@ public class Course implements Serializable{
 	private String code;
 	
 	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "subject_id")
+	@JoinColumn(name = "course_id")
 	private List<Subject> subjects;
 	
 

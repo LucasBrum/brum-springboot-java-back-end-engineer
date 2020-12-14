@@ -38,7 +38,6 @@ public class SubjectServiceImpl implements SubjectService {
 	@Override
 	public Boolean create(SubjectDto subjectDto) {
 		try {
-
 			Subject subject = this.mapper.map(subjectDto, Subject.class);
 
 			this.subjectRepository.save(subject);
