@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
@@ -133,10 +132,5 @@ public class CourseServiceImpl implements CourseService {
 			throw e;
 		}
 	}
-
-	
-	
-	
-
 	
 }
