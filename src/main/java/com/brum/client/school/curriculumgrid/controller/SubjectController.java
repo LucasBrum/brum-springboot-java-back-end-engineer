@@ -32,11 +32,11 @@ public class SubjectController {
 	@GetMapping
 	public ResponseEntity<Response<List<SubjectDto>>> listAll() {
 		
-		List<SubjectDto> listSubjects = this.subjectService.listAll();
+		List<SubjectDto> subjectsList = this.subjectService.listAll();
 
 		Response<List<SubjectDto>> response = new Response<>();
 		
-		response.setData(listSubjects);
+		response.setData(subjectsList);
 		response.setStatusCode(HttpStatus.OK.value());
 		response.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).listAll()).withSelfRel());
 		
