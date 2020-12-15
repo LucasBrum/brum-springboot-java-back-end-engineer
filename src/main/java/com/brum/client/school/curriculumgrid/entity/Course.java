@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -41,8 +42,8 @@ public class Course implements Serializable{
 	@Column(name = "code")
 	private String code;
 	
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "course_id")
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "course  vbnm _id")
 	private List<Subject> subjects;
 	
 
