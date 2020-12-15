@@ -4,12 +4,13 @@ server:
     contextPath: /
 spring:
   datasource:
-    driverClassName: org.h2.Driver
-    password: brum
-    url: jdbc:h2:mem:brumdb
-    username: brum
+    driverClassName: org.postgresql.Driver
+
+    url: ${DATABASE_URL}
   h2:
     console:
       enabled: true
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
