@@ -8,5 +8,6 @@ Microservice responsible for curriculum grid maintenance
 - HATEOAS
 - Mockito
 - Travis CI
+- JUnit
 
 
