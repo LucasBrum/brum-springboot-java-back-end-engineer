@@ -1,10 +1,10 @@
-languagem: java
+language: java
 jdk:
   -openjdk8
 deploy:
   provider: heroku
   api_key:
      secure: fqqysFXtr8PACBvKNhmgVBWDAOHQvJPf/yIiN7mBeKFTv7lSrU3+MMRYgT7JxhMV0yjUasrjinjw1cEXRiRQ1X3f4XXfJm66vXpSmub60bYfxsHbIC/T2eqs0LfrFHQbbgAzdX6nnI2HirpsLckLFCqmNs6pVNx8AYEkDhl+PjxdSrqg35lfb9E57g6ihvJWHp41O2WD0gm9sBO+GwNnvYXlqceLDi4SS6Ienq2ogy1G3xCMjSPc+CvlMptMkEJgKoBw7xoehIXOKIJlbESvJpcP37FyvSR7OerU2AyWkWvOn0f/h6KtBe7H/kWz86BAQjBNNQfpQh0WGNylfEvywtOGhQZfxIuvRBzRBzVTIPIFYebUgxDViT0iL+I+beuhLjr7pkMWWGof9XaGoal58+qo3H7+W2d+9IgxgVrbZDs88OYexjYSseTsJYjn7aY/IYCzCLwyRrkboibw4972Zx/m7LdBVBzMncxcLGAcsDwQHug3HumbBgLz8AzobM89iXGLCJIPP3V9G0GTPYqSvTCKuGCO0mleo//GenBMfnFM+ywWJkpn2vgVP//Ez8hg2+OKKP4kfiODe//x4fBmezigsmBwSWbTrdPtsBoXdrIlFbpKYzO/BhD2TjLqlR0YwL/LN1aixN49OR5So16k1HV89lN+n4OdcGY70sBLoKA=
-  app: curriculum-grid-dev
+  app: curriculum-grid
   on:
     all_branches: true
