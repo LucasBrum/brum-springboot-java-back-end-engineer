@@ -9,5 +9,5 @@ Microservice responsible for curriculum grid maintenance
 - Mockito
 - Travis CI
 - JUnit 5
-
+- Sonar Lint
 
