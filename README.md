@@ -6,8 +6,9 @@ Microservice responsible for curriculum grid maintenance
 - Cache
 - H2
 - HATEOAS
-- Mockito
 - Travis CI
 - JUnit 5
+- Mockito
 - Sonar Lint
+- Coverage
 
