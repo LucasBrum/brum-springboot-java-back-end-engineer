@@ -45,10 +45,16 @@ public class SubjectController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Boolean> create(@Valid @RequestBody SubjectDto subjectDto) {
+	public ResponseEntity<Response<Boolean>> create(@Valid @RequestBody SubjectDto subjectDto) {
+
 		Boolean isSubjectCreated = this.subjectService.create(subjectDto);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(isSubjectCreated);
+		Response<Boolean> response = new Response<>();
+		response.setData(isSubjectCreated);
+		response.setStatusCode(HttpStatus.CREATED.value());
+		
+		
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 	
 	@GetMapping("/{id}")
@@ -67,18 +73,27 @@ public class SubjectController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<Boolean> update(@Valid @RequestBody SubjectDto subjectDto) {
+	public ResponseEntity<Response<Boolean>> update(@Valid @RequestBody SubjectDto subjectDto) {
 		
 		Boolean isSubjectUpdated = this.subjectService.update(subjectDto);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(isSubjectUpdated);
+		Response<Boolean> response = new Response<>();
+		response.setData(isSubjectUpdated);
+		response.setStatusCode(HttpStatus.OK.value());
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 		
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Boolean> delete(@PathVariable Long id) {
+	public ResponseEntity<Response<Boolean>> delete(@PathVariable Long id) {
+		Boolean isSubjectDeleted = this.subjectService.delete(id);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(this.subjectService.delete(id));
+		Response<Boolean> response = new Response<>();
+		response.setData(isSubjectDeleted);
+		response.setStatusCode(HttpStatus.OK.value());
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 		
 	}
 	
@@ -94,6 +109,7 @@ public class SubjectController {
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
+	@GetMapping("/min-frequency/{frequency}")
 	public ResponseEntity<Response<List<SubjectDto>>> findByFrequency(@PathVariable int frequency) {
 		Response<List<SubjectDto>> response = new Response<>();
 		List<SubjectDto> subjectsList = this.subjectService.findByFrequency(frequency);
