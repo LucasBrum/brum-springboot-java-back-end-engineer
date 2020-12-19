@@ -31,7 +31,7 @@ import com.brum.client.school.curriculumgrid.test.datafactory.SubjectDataFactory
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(JUnitPlatform.class)
-public class SubjectControllerTest {
+public class SubjectControllerUnitTest {
 
 	@LocalServerPort
 	private int port;

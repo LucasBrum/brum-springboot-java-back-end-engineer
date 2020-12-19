@@ -1,6 +1,7 @@
 package com.brum.client.school.curriculumgrid.test.datafactory;
 
 import com.brum.client.school.curriculumgrid.dto.SubjectDto;
+import com.brum.client.school.curriculumgrid.entity.Subject;
 
 public abstract class SubjectDataFactory {
 
@@ -17,4 +18,15 @@ public abstract class SubjectDataFactory {
 		
 		return subjectDto;
 	}
+	
+	public static Subject build() {
+		Subject subject = new Subject();
+		subject.setName("Introdução a Linguagem de Programação");
+		subject.setCode("ILP");
+		subject.setFrequency(1);
+		subject.setHours(64);
+		
+		return subject;
+	}
+	
 }
