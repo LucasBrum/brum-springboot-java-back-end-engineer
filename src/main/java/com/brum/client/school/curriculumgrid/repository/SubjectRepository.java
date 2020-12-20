@@ -16,5 +16,5 @@ public interface SubjectRepository extends JpaRepository<Subject, Long>{
 	public List<Subject> findByMinHour(@Param("minHour") int minHour);
 	
 	@Query("Select s from Subject s where s.frequency = :frequency")
-	public List<Subject> findByFrequencyEqualOne(@Param("frequency") int frequency);
+	public List<Subject> findByFrequency(@Param("frequency") int frequency);
 }

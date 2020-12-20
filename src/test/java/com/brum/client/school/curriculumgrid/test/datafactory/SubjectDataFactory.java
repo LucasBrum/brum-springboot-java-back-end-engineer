@@ -19,7 +19,7 @@ public abstract class SubjectDataFactory {
 		return subjectDto;
 	}
 	
-	public static Subject build() {
+	public static Subject buildToCreate() {
 		Subject subject = new Subject();
 		subject.setName("Introdução a Linguagem de Programação");
 		subject.setCode("ILP");
@@ -29,4 +29,14 @@ public abstract class SubjectDataFactory {
 		return subject;
 	}
 	
+	public static Subject build() {
+		Subject subject = new Subject();
+		subject.setId(1L);
+		subject.setName("Introdução a Linguagem de Programação");
+		subject.setCode("ILP");
+		subject.setFrequency(1);
+		subject.setHours(64);
+		
+		return subject;
+	}
 }

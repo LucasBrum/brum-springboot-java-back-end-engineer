@@ -139,7 +139,7 @@ public class SubjectServiceImpl implements SubjectService {
 	@Override
 	public List<SubjectDto> findByFrequency(int frequency) {
 		try {
-			List<Subject> subjectList = this.subjectRepository.findByFrequencyEqualOne(frequency);
+			List<Subject> subjectList = this.subjectRepository.findByFrequency(frequency);
 
 			return this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
 			}.getType());

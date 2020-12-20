@@ -168,7 +168,7 @@ public class SubjectControllerIntegratedTest {
 	
 	@Test
 	public void testCreateSubject() {
-		Subject subject = SubjectDataFactory.build();
+		Subject subject = SubjectDataFactory.buildToCreate();
 		
 		HttpEntity<Subject> request = new HttpEntity<>(subject);
 
