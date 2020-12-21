@@ -1,11 +1,14 @@
 package com.brum.client.school.curriculumgrid.test.service;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,8 +26,8 @@ import com.brum.client.school.curriculumgrid.repository.SubjectRepository;
 import com.brum.client.school.curriculumgrid.service.impl.SubjectServiceImpl;
 import com.brum.client.school.curriculumgrid.test.datafactory.SubjectDataFactory;
 
-@ExtendWith(MockitoExtension.class)
 @RunWith(JUnitPlatform.class)
+@ExtendWith(MockitoExtension.class)
 public class SubjectServiceUnitTest {
 
 	
@@ -94,5 +97,60 @@ public class SubjectServiceUnitTest {
 		
 		Mockito.verify(this.subjectRepository, times(1)).findByFrequency(1);
 	}
+	
+	@Test
+	public void testFindByIdSucess() {
+		Mockito.when(this.subjectRepository.findById(1L)).thenReturn(Optional.of(subject));
+		SubjectDto subjectDto = this.subjectService.findById(1L);
+		
+		assertNotNull(subjectDto);
+		assertEquals("ILP", subjectDto.getCode());
+		assertEquals(1, subjectDto.getId());
+		assertEquals(1, subjectDto.getFrequency());
+		
+		Mockito.verify(this.subjectRepository, times(1)).findById(1L);
+		
+	}
+	
+	@Test
+	public void testCreateSucess() {
+		
+		SubjectDto subjectDto = SubjectDataFactory.buildDtoToCreate();
+		Subject subject = SubjectDataFactory.buildToCreate();
+
+		lenient().when(this.subjectRepository.save(subject)).thenReturn(subject);
+		
+		Boolean isSubjectSaved = this.subjectService.create(subjectDto);
+		
+		assertTrue(isSubjectSaved);
+		
+		
+	}
+	
+	@Test
+	public void testUpdateSucess() {
+		
+		SubjectDto subjectDto = SubjectDataFactory.buildDto();
+
+		lenient().when(this.subjectRepository.findById(1L)).thenReturn(Optional.of(subject));
+		lenient().when(this.subjectRepository.save(subject)).thenReturn(subject);
+		
+		Boolean isSubjectUpdated = this.subjectService.update(subjectDto);
+		
+		assertTrue(isSubjectUpdated);
+		
+	}
+	
+	@Test
+	public void testDeleteSucess() {
+		
+		lenient().when(this.subjectRepository.findById(1L)).thenReturn(Optional.of(subject));
+		
+		Boolean isSubjectDeleted = this.subjectService.delete(1L);
+		
+		assertTrue(isSubjectDeleted);
+		
+	}
+	
 	
 }

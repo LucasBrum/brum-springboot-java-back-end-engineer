@@ -19,6 +19,17 @@ public abstract class SubjectDataFactory {
 		return subjectDto;
 	}
 	
+	public static SubjectDto buildDtoToCreate() {
+		
+		SubjectDto subjectDto = new SubjectDto();
+		subjectDto.setName("Introdução a Linguagem de Programação");
+		subjectDto.setCode("ILP");
+		subjectDto.setFrequency(1);
+		subjectDto.setHours(100);
+		
+		return subjectDto;
+	}
+	
 	public static Subject buildToCreate() {
 		Subject subject = new Subject();
 		subject.setName("Introdução a Linguagem de Programação");
