@@ -37,9 +37,13 @@ public class SubjectServiceImpl implements SubjectService {
 
 	@Override
 	public Boolean create(SubjectDto subjectDto) {
-		try {
-			Subject subject = this.mapper.map(subjectDto, Subject.class);
 
+		if(subjectDto.getId() != null) {
+			throw new SubjectException(ExceptionMessageEnum.ERROR_ID_INFORMED.getValue(), HttpStatus.BAD_REQUEST);
+		}
+		
+		try {
+			Subject subject = this.mapper.map(subjectDto, Subject.class);			
 			this.subjectRepository.save(subject);
 
 			return Boolean.TRUE;
@@ -63,10 +67,7 @@ public class SubjectServiceImpl implements SubjectService {
 
 		} catch (SubjectException subjectException) {
 			throw subjectException;
-		} catch (Exception e) {
-			throw e;
 		}
-
 	}
 
 	@Override

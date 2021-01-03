@@ -3,6 +3,7 @@ package com.brum.client.school.curriculumgrid.test.service;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 
@@ -19,9 +20,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import com.brum.client.school.curriculumgrid.dto.SubjectDto;
 import com.brum.client.school.curriculumgrid.entity.Subject;
+import com.brum.client.school.curriculumgrid.exception.SubjectException;
 import com.brum.client.school.curriculumgrid.repository.SubjectRepository;
 import com.brum.client.school.curriculumgrid.service.impl.SubjectServiceImpl;
 import com.brum.client.school.curriculumgrid.test.datafactory.SubjectDataFactory;
@@ -149,6 +152,63 @@ public class SubjectServiceUnitTest {
 		Boolean isSubjectDeleted = this.subjectService.delete(1L);
 		
 		assertTrue(isSubjectDeleted);
+		
+	}
+	
+	@Test
+	public void testUpdateThrowSubjectException() {
+		
+		SubjectDto subjectDto = SubjectDataFactory.buildDto();
+
+		lenient().when(this.subjectRepository.findById(1L)).thenReturn(Optional.empty());
+		
+		SubjectException subjectException;
+		
+		subjectException = assertThrows(SubjectException.class, () -> {
+			this.subjectService.update(subjectDto);
+		});
+		
+		assertEquals(HttpStatus.NOT_FOUND, subjectException.getHttpStatus());
+		
+		Mockito.verify(this.subjectRepository, times(1)).findById(1L);
+		Mockito.verify(this.subjectRepository, times(0)).save(subject);
+		
+	}
+	
+	@Test
+	public void testCreateThrowSubjectException() {
+		
+		SubjectDto subjectDto = SubjectDataFactory.buildDto();
+		
+		lenient().when(this.subjectRepository.findById(1L)).thenReturn(Optional.empty());
+		
+		SubjectException subjectException;
+		
+		subjectException = assertThrows(SubjectException.class, () -> {
+			this.subjectService.create(subjectDto);
+		});
+		
+		assertEquals(HttpStatus.BAD_REQUEST, subjectException.getHttpStatus());
+		
+		Mockito.verify(this.subjectRepository, times(0)).save(subject);
+		
+	}
+	
+	@Test
+	public void testDeleteThrowSubjectException() {
+		
+		lenient().when(this.subjectRepository.findById(1L)).thenReturn(Optional.empty());
+		
+		SubjectException subjectException;
+		
+		subjectException = assertThrows(SubjectException.class, () -> {
+			this.subjectService.delete(1L);
+		});
+		
+		assertEquals(HttpStatus.NOT_FOUND, subjectException.getHttpStatus());
+		
+		Mockito.verify(this.subjectRepository, times(1)).findById(1L);
+		Mockito.verify(this.subjectRepository, times(0)).delete(subject);
 		
 	}
 	
