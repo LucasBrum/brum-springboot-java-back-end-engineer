@@ -316,5 +316,23 @@ public class SubjectServiceUnitTest {
 		Mockito.verify(this.subjectRepository, times(1)).findById(1L);
 
 	}
+	
+	@Test
+	public void testExcluirThrowException() {
+		Mockito.when(this.subjectRepository.findById(1L)).thenReturn(Optional.of(subject));
+		Mockito.doThrow(IllegalStateException.class).when(this.subjectRepository).deleteById(1L);
+		
+		SubjectException subjectException;
+		
+		subjectException = assertThrows(SubjectException.class, () -> {
+			this.subjectService.delete(1L);
+		});
+		
+		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, subjectException.getHttpStatus());
+		assertEquals(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), subjectException.getMessage());
+
+		Mockito.verify(this.subjectRepository, times(1)).findById(1L);
+		Mockito.verify(this.subjectRepository, times(1)).deleteById(1L);
+	}
 
 }
