@@ -67,6 +67,8 @@ public class SubjectServiceImpl implements SubjectService {
 
 		} catch (SubjectException subjectException) {
 			throw subjectException;
+		} catch (Exception e) {
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
