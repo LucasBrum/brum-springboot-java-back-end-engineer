@@ -22,28 +22,27 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class Course implements Serializable{
+public class Course implements Serializable {
 
 	private static final long serialVersionUID = -6079621699709371554L;
-	
+
 	@Id
 	@Column(name = "id")
 	@JsonInclude(Include.NON_NULL)
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
-	
+
 	@JsonInclude(Include.NON_EMPTY)
 	@Column(name = "name")
 	private String name;
-	
+
 	@JsonInclude(Include.NON_EMPTY)
 	@Column(name = "code")
 	private String code;
-	
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "course  vbnm _id")
 	private List<Subject> subjects;
-	
 
 }

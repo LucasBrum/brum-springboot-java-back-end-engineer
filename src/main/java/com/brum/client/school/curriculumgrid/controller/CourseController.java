@@ -27,67 +27,62 @@ public class CourseController {
 
 	@Autowired
 	private CourseService courseService;
-	
-	
+
 	@GetMapping
 	public ResponseEntity<Response<List<Course>>> listAll() {
 		List<Course> coursesList = this.courseService.listAll();
-		
+
 		Response<List<Course>> response = new Response<>();
-		
+
 		response.setData(coursesList);
 		response.setStatusCode(HttpStatus.OK.value());
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body(response);
-		
+
 	}
-	
-	
+
 	@PostMapping
 	public ResponseEntity<Boolean> create(@Valid @RequestBody CourseDto courseDto) {
-		
 		Boolean isCourseCreated = this.courseService.create(courseDto);
-		
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(isCourseCreated);
 	}
-	
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Response<Course>> findById(@PathVariable Long id) {
-		
+
 		Course course = this.courseService.findById(id);
-		
+
 		Response<Course> response = new Response<>();
 		response.setData(course);
 		response.setStatusCode(HttpStatus.OK.value());
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body(response);
-		
+
 	}
-	
+
 	@GetMapping("/code/{code}")
 	public ResponseEntity<Response<Course>> findByCode(@PathVariable String code) {
 		Course course = this.courseService.findByCode(code);
-		
+
 		Response<Course> response = new Response<>();
 		response.setData(course);
 		response.setStatusCode(HttpStatus.OK.value());
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
-	
+
 	@PutMapping
 	public ResponseEntity<Boolean> update(@Valid @RequestBody CourseDto courseDto) {
 		Boolean isCourseUpdated = this.courseService.update(courseDto);
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body(isCourseUpdated);
 	}
-	
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Boolean> delete(@PathVariable Long id) {
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body(this.courseService.delete(id));
 	}
-	
+
 }

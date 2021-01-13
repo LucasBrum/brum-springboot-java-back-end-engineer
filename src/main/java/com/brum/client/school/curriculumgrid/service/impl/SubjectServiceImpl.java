@@ -38,25 +38,24 @@ public class SubjectServiceImpl implements SubjectService {
 	@Override
 	public Boolean create(SubjectDto subjectDto) {
 
-		if(subjectDto.getId() != null) {
+		if (subjectDto.getId() != null) {
 			throw new SubjectException(ExceptionMessageEnum.ERROR_ID_INFORMED.getValue(), HttpStatus.BAD_REQUEST);
 		}
-		
+
 		try {
-			Subject subject = this.mapper.map(subjectDto, Subject.class);			
+			Subject subject = this.mapper.map(subjectDto, Subject.class);
 			this.subjectRepository.save(subject);
 
 			return Boolean.TRUE;
 		} catch (Exception e) {
-			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@Override
 	public Boolean update(SubjectDto subject) {
-
 		try {
-
 			this.findById(subject.getId());
 
 			Subject subjectUpdated = this.mapper.map(subject, Subject.class);
@@ -68,7 +67,8 @@ public class SubjectServiceImpl implements SubjectService {
 		} catch (SubjectException subjectException) {
 			throw subjectException;
 		} catch (Exception e) {
-			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -81,7 +81,8 @@ public class SubjectServiceImpl implements SubjectService {
 		} catch (SubjectException subjectException) {
 			throw subjectException;
 		} catch (Exception e) {
-			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -103,7 +104,8 @@ public class SubjectServiceImpl implements SubjectService {
 		} catch (SubjectException subjectException) {
 			throw subjectException;
 		} catch (Exception e) {
-			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -123,7 +125,8 @@ public class SubjectServiceImpl implements SubjectService {
 			return subjectDtosList;
 
 		} catch (Exception e) {
-			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -135,7 +138,8 @@ public class SubjectServiceImpl implements SubjectService {
 			return this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
 			}.getType());
 		} catch (Exception e) {
-			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -147,7 +151,8 @@ public class SubjectServiceImpl implements SubjectService {
 			return this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
 			}.getType());
 		} catch (Exception e) {
-			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new SubjectException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(),
+					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

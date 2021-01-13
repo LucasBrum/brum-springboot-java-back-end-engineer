@@ -19,5 +19,4 @@ public interface CourseService {
 	
 	public Course findById(Long id);
 	
-	
 }

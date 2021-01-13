@@ -69,7 +69,7 @@ public class SubjectServiceUnitTest {
 	}
 
 	@Test
-	public void testListAllSucessThrowException() {
+	public void testListAllThrowException() {
 		List<Subject> subjectsList = new ArrayList<>();
 		subjectsList.add(subject);
 
