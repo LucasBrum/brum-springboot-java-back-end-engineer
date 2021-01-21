@@ -42,19 +42,23 @@ public class CourseController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Boolean> create(@Valid @RequestBody CourseDto courseDto) {
+	public ResponseEntity<Response<Boolean>> create(@Valid @RequestBody CourseDto courseDto) {
 		Boolean isCourseCreated = this.courseService.create(courseDto);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(isCourseCreated);
+		Response<Boolean> response = new Response<>();
+		response.setData(isCourseCreated);
+		response.setStatusCode(HttpStatus.OK.value());
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Response<Course>> findById(@PathVariable Long id) {
+	public ResponseEntity<Response<CourseDto>> findById(@PathVariable Long id) {
 
-		Course course = this.courseService.findById(id);
+		CourseDto courseDto = this.courseService.findById(id);
 
-		Response<Course> response = new Response<>();
-		response.setData(course);
+		Response<CourseDto> response = new Response<>();
+		response.setData(courseDto);
 		response.setStatusCode(HttpStatus.OK.value());
 
 		return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -62,10 +66,10 @@ public class CourseController {
 	}
 
 	@GetMapping("/code/{code}")
-	public ResponseEntity<Response<Course>> findByCode(@PathVariable String code) {
-		Course course = this.courseService.findByCode(code);
+	public ResponseEntity<Response<CourseDto>> findByCode(@PathVariable String code) {
+		CourseDto course = this.courseService.findByCode(code);
 
-		Response<Course> response = new Response<>();
+		Response<CourseDto> response = new Response<>();
 		response.setData(course);
 		response.setStatusCode(HttpStatus.OK.value());
 
@@ -73,16 +77,26 @@ public class CourseController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Boolean> update(@Valid @RequestBody CourseDto courseDto) {
+	public ResponseEntity<Response<Boolean>> update(@Valid @RequestBody CourseDto courseDto) {
 		Boolean isCourseUpdated = this.courseService.update(courseDto);
+		
+		Response<Boolean> response = new Response<>();
+		response.setData(isCourseUpdated);
+		response.setStatusCode(HttpStatus.OK.value());
 
-		return ResponseEntity.status(HttpStatus.OK).body(isCourseUpdated);
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Boolean> delete(@PathVariable Long id) {
+	public ResponseEntity<Response<Boolean>> delete(@PathVariable Long id) {
+		
+		Boolean isCourseDeleted = this.courseService.delete(id);
+		
+		Response<Boolean> response = new Response<>();
+		response.setData(isCourseDeleted);
+		response.setStatusCode(HttpStatus.OK.value());
 
-		return ResponseEntity.status(HttpStatus.OK).body(this.courseService.delete(id));
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 }

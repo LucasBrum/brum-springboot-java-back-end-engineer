@@ -28,9 +28,9 @@ import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.service.SubjectService;
 import com.brum.client.school.curriculumgrid.test.datafactory.SubjectDataFactory;
 
+@RunWith(JUnitPlatform.class)
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(JUnitPlatform.class)
 public class SubjectControllerUnitTest {
 
 	@LocalServerPort

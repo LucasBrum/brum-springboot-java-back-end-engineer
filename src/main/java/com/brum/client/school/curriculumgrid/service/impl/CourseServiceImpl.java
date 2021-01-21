@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
@@ -26,36 +25,36 @@ import com.brum.client.school.curriculumgrid.service.CourseService;
 public class CourseServiceImpl implements CourseService {
 
 	private ModelMapper mapper;
-	
+
 	@Autowired
 	private CourseRepository courseRepository;
-	
+
 	@Autowired
 	private SubjectRepository subjectRepository;
-	
+
 	@Autowired
 	public CourseServiceImpl(CourseRepository courseRepository) {
 		this.mapper = new ModelMapper();
 		this.courseRepository = courseRepository;
 	}
-	
+
 	@Override
 	public Boolean create(CourseDto courseDto) {
 		try {
 			List<Subject> subjectsList = new ArrayList<>();
-			
+
 			if (!courseDto.getSubjects().isEmpty()) {
 				courseDto.getSubjects().forEach(subject -> {
-					if(this.subjectRepository.findById(subject).isPresent())
+					if (this.subjectRepository.findById(subject).isPresent())
 						subjectsList.add(this.subjectRepository.findById(subject).get());
-						
+
 				});
 			}
-			
+
 			Course course = this.mapper.map(courseDto, Course.class);
 			course.setSubjects(subjectsList);
 			this.courseRepository.save(course);
-			
+
 			return Boolean.TRUE;
 		} catch (Exception e) {
 			throw new CourseException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,14 +64,14 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public Boolean update(CourseDto course) {
 		try {
-			Course courseSaved = this.findById(course.getId());
-			
-			BeanUtils.copyProperties(course, courseSaved, "id");
-			
-			this.courseRepository.save(courseSaved);
-			
+			this.findById(course.getId());
+
+			Course courseUpdated = this.mapper.map(course, Course.class);
+
+			this.courseRepository.save(courseUpdated);
+
 			return Boolean.TRUE;
-			
+
 		} catch (CourseException ce) {
 			throw ce;
 		} catch (Exception e) {
@@ -86,7 +85,7 @@ public class CourseServiceImpl implements CourseService {
 			this.findById(id);
 			this.courseRepository.deleteById(id);
 			return Boolean.TRUE;
-			
+
 		} catch (CourseException ce) {
 			throw ce;
 		} catch (Exception e) {
@@ -103,13 +102,15 @@ public class CourseServiceImpl implements CourseService {
 			throw new CourseException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@Override
-	public Course findByCode(String code) {
+	public CourseDto findByCode(String code) {
 		try {
-			
-			return this.courseRepository.findByCode(code);
-			
+
+			Course course = this.courseRepository.findByCode(code);
+
+			return this.mapper.map(course, CourseDto.class);
+
 		} catch (Exception e) {
 			throw new CourseException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -117,21 +118,21 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	@CachePut(key = "#id")
-	public Course findById(Long id) {
+	public CourseDto findById(Long id) {
 		try {
-			Optional<Course> courseOptional = this.courseRepository.findById(id);
-			
-			if (courseOptional.isPresent()) {
-				return courseOptional.get();
+			Optional<Course> course = this.courseRepository.findById(id);
+
+			if (course.isPresent()) {
+				return this.mapper.map(course.get(), CourseDto.class);
 			}
-			
+
 			throw new CourseException(ExceptionMessageEnum.COURSE_NOT_FOUND.getValue(), HttpStatus.NOT_FOUND);
-			
+
 		} catch (CourseException ce) {
 			throw ce;
 		} catch (Exception e) {
 			throw e;
 		}
 	}
-	
+
 }

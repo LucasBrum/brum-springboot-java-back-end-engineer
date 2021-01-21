@@ -19,7 +19,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import com.brum.client.school.curriculumgrid.dto.CourseDto;
 import com.brum.client.school.curriculumgrid.entity.Course;
 import com.brum.client.school.curriculumgrid.exception.CourseException;
 import com.brum.client.school.curriculumgrid.repository.CourseRepository;
@@ -37,8 +36,6 @@ public class CourseServiceUnitTest {
 	private CourseServiceImpl courseService;
 	
 	private static Course course;
-	
-	private static CourseDto courseDto;
 	
 	@BeforeAll
 	public static void init() {
