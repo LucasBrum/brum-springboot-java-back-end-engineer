@@ -11,4 +11,5 @@ Microservice responsible for curriculum grid maintenance
 - Mockito
 - Sonar Lint
 - Coverage
+- Heroku
 
