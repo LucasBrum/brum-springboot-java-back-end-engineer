@@ -46,7 +46,6 @@ public class SubjectController {
 	
 	@PostMapping
 	public ResponseEntity<Response<Boolean>> create(@Valid @RequestBody SubjectDto subjectDto) {
-
 		Boolean isSubjectCreated = this.subjectService.create(subjectDto);
 		
 		Response<Boolean> response = new Response<>();

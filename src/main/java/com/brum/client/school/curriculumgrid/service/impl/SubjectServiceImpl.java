@@ -94,9 +94,7 @@ public class SubjectServiceImpl implements SubjectService {
 			Optional<Subject> subject = subjectRepository.findById(id);
 
 			if (subject.isPresent()) {
-
 				return this.mapper.map(subject.get(), SubjectDto.class);
-
 			}
 
 			throw new SubjectException(ExceptionMessageEnum.SUBJECT_NOT_FOUND.getValue(), HttpStatus.NOT_FOUND);

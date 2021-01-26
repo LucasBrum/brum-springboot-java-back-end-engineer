@@ -47,7 +47,7 @@ public class CourseController {
 
 		Response<Boolean> response = new Response<>();
 		response.setData(isCourseCreated);
-		response.setStatusCode(HttpStatus.OK.value());
+		response.setStatusCode(HttpStatus.CREATED.value());
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
 	}

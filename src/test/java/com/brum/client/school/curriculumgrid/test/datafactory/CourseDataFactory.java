@@ -24,12 +24,35 @@ public abstract class CourseDataFactory {
 
 	}
 
+	public static Course buildToCreate() {
+		List<Subject> subjects = buildListSubjects();
+
+		Course course = new Course();
+		course.setName("Sistema de Informação");
+		course.setCode("SI");
+		course.setSubjects(subjects);
+		return course;
+
+	}
+
 	public static CourseDto buildDto() {
 		List<Long> listSubjectsId = new ArrayList<>();
 		listSubjectsId.add(1L);
 
 		CourseDto courseDto = new CourseDto();
 		courseDto.setId(1L);
+		courseDto.setName("Engenharia de Software");
+		courseDto.setCode("ESW");
+		courseDto.setSubjects(listSubjectsId);
+
+		return courseDto;
+	}
+	
+	public static CourseDto buildDtoToCreate() {
+		List<Long> listSubjectsId = new ArrayList<>();
+		listSubjectsId.add(1L);
+
+		CourseDto courseDto = new CourseDto();
 		courseDto.setName("Engenharia de Software");
 		courseDto.setCode("ESW");
 		courseDto.setSubjects(listSubjectsId);

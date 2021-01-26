@@ -94,7 +94,7 @@ public class SubjectControllerIntegratedTest {
 		Long id = subjectList.get(0).getId();
 		
 		ResponseEntity<Response<SubjectDto>> subject = restTemplate.exchange(
-				"Http://localhost:" + this.port + "/subjects/"+id, HttpMethod.GET, null,
+				"http://localhost:" + this.port + "/subjects/"+id, HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<SubjectDto>>() {
 				});
 
