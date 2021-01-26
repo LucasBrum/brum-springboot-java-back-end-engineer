@@ -10,6 +10,6 @@ import com.brum.client.school.curriculumgrid.entity.Course;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
-	@Query("Select c from Course c where c.code LIKE %:code%")
-	public Course findByCode(@Param("code") String code);
+	@Query("Select c from Course c where c.code = :code")
+	public Course findCourseByCode(@Param("code") String code);
 }

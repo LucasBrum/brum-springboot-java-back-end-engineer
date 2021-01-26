@@ -64,7 +64,7 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public Boolean update(CourseDto course) {
 		try {
-			this.findById(course.getId());
+			this.findByCode(course.getCode());
 
 			Course courseUpdated = this.mapper.map(course, Course.class);
 
@@ -104,12 +104,10 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public CourseDto findByCode(String code) {
+	public Course findByCode(String code) {
 		try {
 
-			Course course = this.courseRepository.findByCode(code);
-
-			return this.mapper.map(course, CourseDto.class);
+			return this.courseRepository.findCourseByCode(code);
 
 		} catch (Exception e) {
 			throw new CourseException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -118,12 +116,12 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	@CachePut(key = "#id")
-	public CourseDto findById(Long id) {
+	public Course findById(Long id) {
 		try {
 			Optional<Course> course = this.courseRepository.findById(id);
 
 			if (course.isPresent()) {
-				return this.mapper.map(course.get(), CourseDto.class);
+				return course.get();
 			}
 
 			throw new CourseException(ExceptionMessageEnum.COURSE_NOT_FOUND.getValue(), HttpStatus.NOT_FOUND);

@@ -105,14 +105,47 @@ public class CourseControllerIntegratedTest {
 		List<Course> courseList = this.courseRepository.findAll();
 		Long id = courseList.get(0).getId();
 		
-		ResponseEntity<Response<CourseDto>> course = restTemplate.exchange(
+		ResponseEntity<Response<Course>> course = restTemplate.exchange(
 				"http://localhost:" +this.port + "/courses/"+id, HttpMethod.GET, null, 
-				new ParameterizedTypeReference<Response<CourseDto>>() {
+				new ParameterizedTypeReference<Response<Course>>() {
 				});
 		
 		assertNotNull(course.getBody().getData());
-		assertEquals("BD", course.getBody().getData().getCode());
+		assertEquals("EC", course.getBody().getData().getCode());
 		assertEquals(200, course.getBody().getStatusCode());
+	}
+	
+	@Test
+	public void testFindCourseByCode() {
+		ResponseEntity<Response<Course>> course = restTemplate.exchange(
+				"http://localhost:" +this.port + "/courses/code/EC", HttpMethod.GET, null, 
+				new ParameterizedTypeReference<Response<Course>>() {
+				});
+		
+		assertNotNull(course.getBody().getData());
+		assertEquals("EC", course.getBody().getData().getCode());
+		assertEquals(200, course.getBody().getStatusCode());
+	}
+	
+	@Test
+	public void testUpdateCourse() {
+		List<Course> courseList = this.courseRepository.findAll();
+		Course course = courseList.get(0);
+		
+		course.setName("Test Course Updated");
+		
+		HttpEntity<Course> request = new HttpEntity<>(course);
+		
+		ResponseEntity<Response<Boolean>> courses = restTemplate.exchange(
+				"http://localhost:" + this.port + "/courses/", HttpMethod.PUT, request,
+				new ParameterizedTypeReference<Response<Boolean>>() {
+				});
+		
+		Course courseUpdated = this.courseRepository.findById(course.getId()).get();
+		
+		assertNotNull(courses.getBody().getData());
+		assertEquals("Test Course Updated", courseUpdated.getName());
+		assertEquals(200, courses.getBody().getStatusCode());
 	}
 	
 }

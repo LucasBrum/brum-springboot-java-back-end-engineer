@@ -44,10 +44,12 @@ public class CourseControllerUnitTest {
 	private TestRestTemplate restTemplate;
 
 	private static CourseDto courseDto;
+	private static Course course;
 
 	@BeforeAll
 	public static void init() {
 		courseDto = CourseDataFactory.buildDto();
+		course = CourseDataFactory.build();
 	}
 
 	@Test
@@ -80,7 +82,7 @@ public class CourseControllerUnitTest {
 
 	@Test
 	public void testFindById() {
-		Mockito.when(this.courseService.findById(1L)).thenReturn(courseDto);
+		Mockito.when(this.courseService.findById(1L)).thenReturn(course);
 
 		ResponseEntity<Response<CourseDto>> course = restTemplate.exchange(
 				"http://localhost:" + this.port + "/courses/1", HttpMethod.GET, null,
@@ -93,7 +95,7 @@ public class CourseControllerUnitTest {
 
 	@Test
 	public void testFindByCode() {
-		Mockito.when(this.courseService.findByCode("BD")).thenReturn(courseDto);
+		Mockito.when(this.courseService.findByCode("BD")).thenReturn(course);
 
 		ResponseEntity<Response<CourseDto>> course = restTemplate.exchange(
 				"http://localhost:" + this.port + "/courses/code/BD", HttpMethod.GET, null,
