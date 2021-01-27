@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +44,10 @@ public class CourseControllerIntegratedTest {
 	
 	@Autowired
 	private CourseRepository courseRepository;
+	
+	private static CourseDto courseDto;
+	
+	private static Course course;
 	
 	@BeforeEach
 	public void init() {
@@ -129,22 +134,25 @@ public class CourseControllerIntegratedTest {
 	
 	@Test
 	public void testUpdateCourse() {
-		List<Course> courseList = this.courseRepository.findAll();
-		Course course = courseList.get(0);
+		List<Course> listCourses = this.courseRepository.findAll();
+		course = listCourses.get(0);
+		CourseDto courseDto = new CourseDto();
+		courseDto.setId(course.getId());
+		courseDto.setName("Test Course Updated");
+		courseDto.setCode(course.getCode());
+		courseDto.setSubjects(Arrays.asList(course.getSubjects().get(0).getId()));
 		
-		course.setName("Test Course Updated");
-		
-		HttpEntity<Course> request = new HttpEntity<>(course);
+		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 		
 		ResponseEntity<Response<Boolean>> courses = restTemplate.exchange(
 				"http://localhost:" + this.port + "/courses/", HttpMethod.PUT, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 		
-		Course courseUpdated = this.courseRepository.findById(course.getId()).get();
+		Optional<Course> courseUpdated = this.courseRepository.findById(courseDto.getId());
 		
 		assertNotNull(courses.getBody().getData());
-		assertEquals("Test Course Updated", courseUpdated.getName());
+		assertEquals("Test Course Updated", courseUpdated.get().getName());
 		assertEquals(200, courses.getBody().getStatusCode());
 	}
 	
