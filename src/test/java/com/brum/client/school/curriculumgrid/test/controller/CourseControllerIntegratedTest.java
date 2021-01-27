@@ -93,16 +93,16 @@ public class CourseControllerIntegratedTest {
 		
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 		
-		ResponseEntity<Response<Boolean>> courses = restTemplate.exchange(
+		ResponseEntity<Response<Boolean>> response = restTemplate.exchange(
 				"http://localhost:" + this.port + "/courses/", HttpMethod.POST, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 		
 		List<Course> coursesList = this.courseRepository.findAll();
 		
-		assertNotNull(courses.getBody().getData());
+		assertNotNull(response.getBody().getData());
 		assertEquals(3, coursesList.size());
-		assertEquals(201, courses.getBody().getStatusCode());
+		assertEquals(201, response.getBody().getStatusCode());
 	}
 	
 	@Test
@@ -144,16 +144,33 @@ public class CourseControllerIntegratedTest {
 		
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 		
-		ResponseEntity<Response<Boolean>> courses = restTemplate.exchange(
+		ResponseEntity<Response<Boolean>> response = restTemplate.exchange(
 				"http://localhost:" + this.port + "/courses/", HttpMethod.PUT, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 		
 		Optional<Course> courseUpdated = this.courseRepository.findById(courseDto.getId());
 		
-		assertNotNull(courses.getBody().getData());
+		assertNotNull(response.getBody().getData());
 		assertEquals("Test Course Updated", courseUpdated.get().getName());
-		assertEquals(200, courses.getBody().getStatusCode());
+		assertEquals(200, response.getBody().getStatusCode());
+	}
+	
+	@Test
+	public void testDeleteCourse() {
+		List<Course> listCourses = this.courseRepository.findAll();
+		Long id = listCourses.get(0).getId();
+		
+		ResponseEntity<Response<Boolean>> response = restTemplate.exchange(
+				"http://localhost:" + this.port + "/courses/"+id, HttpMethod.DELETE, null,
+				new ParameterizedTypeReference<Response<Boolean>>() {
+				});
+		
+		List<Course> coursesList = this.courseRepository.findAll();
+		
+		assertNotNull(response.getBody().getData());
+		assertEquals(1, coursesList.size());
+		assertEquals(200, response.getBody().getStatusCode());
 	}
 	
 }
