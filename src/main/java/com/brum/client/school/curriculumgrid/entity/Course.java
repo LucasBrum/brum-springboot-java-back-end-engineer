@@ -3,7 +3,6 @@ package com.brum.client.school.curriculumgrid.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -42,7 +41,7 @@ public class Course implements Serializable {
 	@Column(name = "code")
 	private String code;
 
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "subject_id")
 	private List<Subject> subjects;
 

@@ -77,16 +77,16 @@ public class CourseControllerUnitTest {
 				});
 
 		assertNotNull(course.getBody().getData());
-		assertEquals(200, course.getBody().getStatusCode());
+		assertEquals(201, course.getBody().getStatusCode());
 	}
 
 	@Test
 	public void testFindById() {
 		Mockito.when(this.courseService.findById(1L)).thenReturn(course);
 
-		ResponseEntity<Response<CourseDto>> course = restTemplate.exchange(
+		ResponseEntity<Response<Course>> course = restTemplate.exchange(
 				"http://localhost:" + this.port + "/courses/1", HttpMethod.GET, null,
-				new ParameterizedTypeReference<Response<CourseDto>>() {
+				new ParameterizedTypeReference<Response<Course>>() {
 				});
 
 		assertNotNull(course.getBody().getData());
@@ -95,11 +95,11 @@ public class CourseControllerUnitTest {
 
 	@Test
 	public void testFindByCode() {
-		Mockito.when(this.courseService.findByCode("BD")).thenReturn(course);
+		Mockito.when(this.courseService.findByCode("SI")).thenReturn(course);
 
-		ResponseEntity<Response<CourseDto>> course = restTemplate.exchange(
-				"http://localhost:" + this.port + "/courses/code/BD", HttpMethod.GET, null,
-				new ParameterizedTypeReference<Response<CourseDto>>() {
+		ResponseEntity<Response<Course>> course = restTemplate.exchange(
+				"http://localhost:" + this.port + "/courses/code/SI", HttpMethod.GET, null,
+				new ParameterizedTypeReference<Response<Course>>() {
 				});
 
 		assertNotNull(course.getBody().getData());

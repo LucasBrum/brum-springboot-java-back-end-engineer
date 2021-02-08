@@ -33,9 +33,10 @@ public class CourseServiceImpl implements CourseService {
 	private SubjectRepository subjectRepository;
 
 	@Autowired
-	public CourseServiceImpl(CourseRepository courseRepository) {
+	public CourseServiceImpl(CourseRepository courseRepository, SubjectRepository subjectRepository) {
 		this.mapper = new ModelMapper();
 		this.courseRepository = courseRepository;
+		this.subjectRepository = subjectRepository;
 	}
 
 	@Override
@@ -62,20 +63,27 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public Boolean update(CourseDto course) {
+	public Boolean update(CourseDto courseDto) {
 		try {
-			this.findByCode(course.getCode());
+			List<Subject> subjects = new ArrayList<>();
+			for (Long subjectId : courseDto.getSubjects()) {
+				Optional<Subject> subjectOptional = this.subjectRepository.findById(subjectId);
+				
+				if(subjectOptional.isPresent()) {
+					subjects.add(subjectOptional.get());
+				}
+			}
 
-			Course courseUpdated = this.mapper.map(course, Course.class);
-
-			this.courseRepository.save(courseUpdated);
+			Course course = this.mapper.map(courseDto, Course.class);
+			course.setSubjects(subjects);
+			this.courseRepository.save(course);
 
 			return Boolean.TRUE;
 
 		} catch (CourseException ce) {
 			throw ce;
 		} catch (Exception e) {
-			throw e;
+			throw new CourseException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -89,7 +97,7 @@ public class CourseServiceImpl implements CourseService {
 		} catch (CourseException ce) {
 			throw ce;
 		} catch (Exception e) {
-			throw e;
+			throw new CourseException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 

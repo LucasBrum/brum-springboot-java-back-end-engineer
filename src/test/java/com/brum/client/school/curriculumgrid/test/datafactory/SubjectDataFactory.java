@@ -59,12 +59,14 @@ public abstract class SubjectDataFactory {
 		List<Subject> subjects = new ArrayList<>();
 
 		Subject subject1 = new Subject();
+		subject1.setId(1L);
 		subject1.setName("Introdução a Linguagem de Programação");
 		subject1.setCode("ILP");
 		subject1.setFrequency(1);
 		subject1.setHours(64);
 
 		Subject subject2 = new Subject();
+		subject2.setId(2L);
 		subject2.setName("Banco de Dados");
 		subject2.setCode("BD");
 		subject2.setFrequency(1);
