@@ -80,8 +80,6 @@ public class CourseServiceImpl implements CourseService {
 
 			return Boolean.TRUE;
 
-		} catch (CourseException ce) {
-			throw ce;
 		} catch (Exception e) {
 			throw new CourseException(ExceptionMessageEnum.INTERNAL_ERROR.getValue(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}

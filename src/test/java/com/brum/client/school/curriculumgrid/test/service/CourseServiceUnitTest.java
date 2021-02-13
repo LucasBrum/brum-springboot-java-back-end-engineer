@@ -47,10 +47,12 @@ public class CourseServiceUnitTest {
 	private CourseServiceImpl courseService;
 
 	private static Course course;
+	private static Subject subject;
 
 	@BeforeAll
 	public static void init() {
 		course = CourseDataFactory.build();
+		subject = SubjectDataFactory.build();
 	}
 
 	@Test
@@ -128,7 +130,9 @@ public class CourseServiceUnitTest {
 	@Test
 	public void testUpdateSuccess() {
 		CourseDto courseDto = CourseDataFactory.buildDto();
-
+		
+		Mockito.when(this.subjectRepository.findById(1L)).thenReturn(Optional.of(subject));
+		lenient().when(this.courseRepository.findById(1L)).thenReturn(Optional.of(course));
 		lenient().when(this.courseRepository.save(course)).thenReturn(course);
 
 		Boolean isCourseUpdated = this.courseService.update(courseDto);
@@ -141,6 +145,7 @@ public class CourseServiceUnitTest {
 	public void testUpdateThrowCourseException() {
 		CourseDto courseDto = CourseDataFactory.buildDto();
 
+		lenient().when(this.courseRepository.findById(1L)).thenReturn(Optional.empty());
 		Mockito.when(this.subjectRepository.findById(1L)).thenThrow(IllegalStateException.class);
 
 		CourseException courseException;
@@ -159,7 +164,7 @@ public class CourseServiceUnitTest {
 	public void testUpdateThrowException() {
 		CourseDto courseDto = CourseDataFactory.buildDto();
 
-		Mockito.when(this.courseRepository.findCourseByCode("ESW")).thenReturn(course);
+		Mockito.when(this.courseRepository.findById(1L)).thenReturn(Optional.of(course));
 		Mockito.when(this.courseRepository.save(course)).thenThrow(IllegalStateException.class);
 
 		CourseException courseException;
@@ -215,6 +220,30 @@ public class CourseServiceUnitTest {
 
 		Mockito.verify(this.courseRepository, times(1)).findById(1L);
 		Mockito.verify(this.courseRepository, times(0)).save(course);
+	}
+
+	@Test
+	public void testFindByCodeSuccess() {
+		Mockito.when(this.courseRepository.findCourseByCode("SI")).thenReturn(course);
+
+		Course course = this.courseService.findByCode("SI");
+
+		assertNotNull(course);
+	}
+	
+	@Test
+	public void testFindByCodeThrowCourseException() {
+		Mockito.when(this.courseRepository.findCourseByCode("SI")).thenThrow(IllegalStateException.class);
+		
+		CourseException courseException;
+
+		courseException = assertThrows(CourseException.class, () -> {
+			this.courseService.findByCode("SI");
+		});
+
+		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, courseException.getHttpStatus());
+
+		Mockito.verify(this.courseRepository, times(1)).findCourseByCode("SI");
 	}
 
 }
