@@ -52,12 +52,15 @@ public class CourseControllerUnitTest {
 		course = CourseDataFactory.build();
 	}
 
+	private String buildURI() {
+		return "http://localhost:" + this.port + "/courses/";
+	}
+
 	@Test
 	public void testListAll() {
 		Mockito.when(this.courseService.listAll()).thenReturn(new ArrayList<Course>());
 
-		ResponseEntity<Response<List<Course>>> courses = restTemplate.exchange(
-				"http://localhost:" + this.port + "/courses/", HttpMethod.GET, null,
+		ResponseEntity<Response<List<Course>>> courses = restTemplate.exchange(buildURI(), HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<Course>>>() {
 				});
 
@@ -72,8 +75,8 @@ public class CourseControllerUnitTest {
 
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 
-		ResponseEntity<Response<Boolean>> course = restTemplate.exchange("http://localhost:" + this.port + "/courses/",
-				HttpMethod.POST, request, new ParameterizedTypeReference<Response<Boolean>>() {
+		ResponseEntity<Response<Boolean>> course = restTemplate.exchange(buildURI(), HttpMethod.POST, request,
+				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 
 		assertNotNull(course.getBody().getData());
@@ -84,9 +87,8 @@ public class CourseControllerUnitTest {
 	public void testFindById() {
 		Mockito.when(this.courseService.findById(1L)).thenReturn(course);
 
-		ResponseEntity<Response<Course>> course = restTemplate.exchange(
-				"http://localhost:" + this.port + "/courses/1", HttpMethod.GET, null,
-				new ParameterizedTypeReference<Response<Course>>() {
+		ResponseEntity<Response<Course>> course = restTemplate.exchange("http://localhost:" + this.port + "/courses/1",
+				HttpMethod.GET, null, new ParameterizedTypeReference<Response<Course>>() {
 				});
 
 		assertNotNull(course.getBody().getData());
@@ -112,8 +114,8 @@ public class CourseControllerUnitTest {
 
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 
-		ResponseEntity<Response<Boolean>> course = restTemplate.exchange("http://localhost:" + this.port + "/courses/",
-				HttpMethod.PUT, request, new ParameterizedTypeReference<Response<Boolean>>() {
+		ResponseEntity<Response<Boolean>> course = restTemplate.exchange(buildURI(), HttpMethod.PUT, request,
+				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 
 		assertNotNull(course.getBody().getData());

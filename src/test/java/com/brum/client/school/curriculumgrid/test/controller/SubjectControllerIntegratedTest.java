@@ -43,38 +43,41 @@ public class SubjectControllerIntegratedTest {
 	public void init() {
 		this.buildDataBase();
 	}
-	
+
 	@AfterEach
 	public void finish() {
 		this.subjectRepository.deleteAll();
 	}
-	
+
 	private void buildDataBase() {
 		Subject s1 = new Subject();
 		s1.setName("Introdução a Linguagem de Programação");
 		s1.setCode("ILP");
 		s1.setFrequency(1);
 		s1.setHours(64);
-		
+
 		Subject s2 = new Subject();
 		s2.setName("Banco de Dados 1");
 		s2.setCode("BD1");
 		s2.setFrequency(1);
 		s2.setHours(82);
-		
+
 		Subject s3 = new Subject();
 		s3.setName("Redes 1");
 		s3.setCode("RD1");
 		s3.setFrequency(1);
 		s3.setHours(100);
-		
+
 		this.subjectRepository.saveAll(Arrays.asList(s1, s2, s3));
+	}
+
+	private String buildURI() {
+		return "http://localhost:" + this.port + "/subjects/";
 	}
 
 	@Test
 	public void testListAllSubjects() {
-		ResponseEntity<Response<List<SubjectDto>>> subjects = restTemplate.exchange(
-				"http://localhost:" + this.port + "/subjects/", HttpMethod.GET, null,
+		ResponseEntity<Response<List<SubjectDto>>> subjects = restTemplate.exchange(buildURI(), HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<SubjectDto>>>() {
 				});
 
@@ -83,15 +86,15 @@ public class SubjectControllerIntegratedTest {
 		assertEquals(200, subjects.getBody().getStatusCode());
 
 	}
-	
+
 	@Test
 	public void testFindSubjectById() {
-		
+
 		List<Subject> subjectList = this.subjectRepository.findAll();
 		Long id = subjectList.get(0).getId();
-		
+
 		ResponseEntity<Response<SubjectDto>> subject = restTemplate.exchange(
-				"http://localhost:" + this.port + "/subjects/"+id, HttpMethod.GET, null,
+				"http://localhost:" + this.port + "/subjects/" + id, HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<SubjectDto>>() {
 				});
 
@@ -99,7 +102,7 @@ public class SubjectControllerIntegratedTest {
 		assertEquals("ILP", subject.getBody().getData().getCode());
 		assertEquals(200, subject.getBody().getStatusCode());
 	}
-	
+
 	@Test
 	public void testFindSubjectByMinHour() {
 		ResponseEntity<Response<List<SubjectDto>>> subject = restTemplate.exchange(
@@ -123,22 +126,22 @@ public class SubjectControllerIntegratedTest {
 		assertEquals(3, subject.getBody().getData().size());
 		assertEquals(200, subject.getBody().getStatusCode());
 	}
-	
+
 	@Test
 	public void testUpdateSubject() {
-		
+
 		List<Subject> listSubjects = this.subjectRepository.findAll();
 		Subject subject = listSubjects.get(0);
-		
+
 		subject.setName("Test Update Subject");
-		
+
 		HttpEntity<Subject> subjectRequest = new HttpEntity<>(subject);
 
 		ResponseEntity<Response<Boolean>> subjects = restTemplate.exchange(
 				"Http://localhost:" + this.port + "/subjects/", HttpMethod.PUT, subjectRequest,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
-		
+
 		Subject subjectUpdated = this.subjectRepository.findById(subject.getId()).get();
 
 		assertNotNull(subjects.getBody().getData());
@@ -150,36 +153,35 @@ public class SubjectControllerIntegratedTest {
 	public void testDeleteSubject() {
 		List<Subject> listSubjects = this.subjectRepository.findAll();
 		Long id = listSubjects.get(0).getId();
-		
+
 		ResponseEntity<Response<Boolean>> subject = restTemplate.exchange(
-				"Http://localhost:" + this.port + "/subjects/"+id, HttpMethod.DELETE, null,
+				"Http://localhost:" + this.port + "/subjects/" + id, HttpMethod.DELETE, null,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
-		
+
 		List<Subject> listSubjectsUpdated = this.subjectRepository.findAll();
 
 		assertNotNull(subject.getBody().getData());
 		assertEquals(2, listSubjectsUpdated.size());
 		assertEquals(200, subject.getBody().getStatusCode());
 	}
-	
+
 	@Test
 	public void testCreateSubject() {
 		Subject subject = SubjectDataFactory.buildToCreate();
-		
+
 		HttpEntity<Subject> request = new HttpEntity<>(subject);
 
 		ResponseEntity<Response<Boolean>> subjectResponse = restTemplate.exchange(
 				"Http://localhost:" + this.port + "/subjects/", HttpMethod.POST, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
-		
+
 		List<Subject> listSubjectsUpdated = this.subjectRepository.findAll();
 
 		assertNotNull(subjectResponse.getBody().getData());
 		assertEquals(4, listSubjectsUpdated.size());
 		assertEquals(201, subjectResponse.getBody().getStatusCode());
 	}
-
 
 }

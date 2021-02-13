@@ -61,10 +61,13 @@ public class CourseControllerIntegratedTest {
 		buildCourseInDataBase();
 	}
 
+	private String buildURI() {
+		return "http://localhost:" + this.port + "/courses/";
+	}
+
 	@Test
 	public void testListAllCourses() {
-		ResponseEntity<Response<List<Course>>> courses = restTemplate.exchange(
-				"http://localhost:" + this.port + "/courses/", HttpMethod.GET, null,
+		ResponseEntity<Response<List<Course>>> courses = restTemplate.exchange(buildURI(), HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<Course>>>() {
 				});
 
@@ -79,8 +82,7 @@ public class CourseControllerIntegratedTest {
 
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 
-		ResponseEntity<Response<Boolean>> response = restTemplate.exchange(
-				"http://localhost:" + this.port + "/courses/", HttpMethod.POST, request,
+		ResponseEntity<Response<Boolean>> response = restTemplate.exchange(buildURI(), HttpMethod.POST, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 
@@ -122,7 +124,7 @@ public class CourseControllerIntegratedTest {
 	public void testUpdateCourse() {
 		List<Course> courses = this.courseRepository.findAll();
 		Course course = courses.get(0);
-		
+
 		CourseDto courseDto = new CourseDto();
 		courseDto.setId(course.getId());
 		courseDto.setCode(course.getCode());
@@ -131,8 +133,7 @@ public class CourseControllerIntegratedTest {
 
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 
-		ResponseEntity<Response<Boolean>> response = restTemplate.exchange(
-				"http://localhost:" + this.port + "/courses/", HttpMethod.PUT, request,
+		ResponseEntity<Response<Boolean>> response = restTemplate.exchange(buildURI(), HttpMethod.PUT, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 
@@ -162,14 +163,14 @@ public class CourseControllerIntegratedTest {
 
 	private void buildCourseInDataBase() {
 		List<Subject> subjects = this.subjectRepository.findAll();
-		
+
 		Course course1 = new Course();
 		course1.setName("Engenharia da Computação");
 		course1.setCode("EC");
 		course1.setSubjects(subjects);
 
 		this.courseRepository.save(course1);
-		
+
 	}
 
 	private void createSubjectsInDatabase() {
@@ -192,7 +193,7 @@ public class CourseControllerIntegratedTest {
 		s3.setHours(100);
 
 		this.subjectRepository.saveAll(Arrays.asList(s1, s2, s3));
-		
+
 	}
 
 }

@@ -50,12 +50,15 @@ public class SubjectControllerUnitTest {
 
 	}
 
+	private String buildURI() {
+		return "http://localhost:" + this.port + "/subjects/";
+	}
+
 	@Test
 	public void testListAllSubjects() {
 		Mockito.when(this.subjectService.listAll()).thenReturn(new ArrayList<SubjectDto>());
 
-		ResponseEntity<Response<List<SubjectDto>>> subjects = restTemplate.exchange(
-				"http://localhost:" + this.port + "/subjects/", HttpMethod.GET, null,
+		ResponseEntity<Response<List<SubjectDto>>> subjects = restTemplate.exchange(buildURI(), HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<SubjectDto>>>() {
 				});
 
