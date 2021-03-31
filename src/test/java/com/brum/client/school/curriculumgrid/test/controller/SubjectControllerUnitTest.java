@@ -58,7 +58,7 @@ public class SubjectControllerUnitTest {
 	public void testListAllSubjects() {
 		Mockito.when(this.subjectService.listAll()).thenReturn(new ArrayList<SubjectDto>());
 
-		ResponseEntity<Response<List<SubjectDto>>> subjects = restTemplate.exchange(buildURI(), HttpMethod.GET, null,
+		ResponseEntity<Response<List<SubjectDto>>> subjects = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(buildURI(), HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<SubjectDto>>>() {
 				});
 
@@ -127,7 +127,7 @@ public class SubjectControllerUnitTest {
 	public void testFindSubjectByMinHour() {
 		Mockito.when(this.subjectService.findByMinHour(50)).thenReturn(new ArrayList<SubjectDto>());
 
-		ResponseEntity<Response<List<SubjectDto>>> subject = restTemplate.exchange(
+		ResponseEntity<Response<List<SubjectDto>>> subject = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/min-hour/40", HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<SubjectDto>>>() {
 				});
@@ -140,7 +140,7 @@ public class SubjectControllerUnitTest {
 	public void testFindSubjectByFrequency() {
 		Mockito.when(this.subjectService.findByFrequency(1)).thenReturn(new ArrayList<SubjectDto>());
 
-		ResponseEntity<Response<List<SubjectDto>>> subject = restTemplate.exchange(
+		ResponseEntity<Response<List<SubjectDto>>> subject = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/min-frequency/49", HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<SubjectDto>>>() {
 				});

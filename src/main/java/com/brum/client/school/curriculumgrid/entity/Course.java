@@ -41,7 +41,7 @@ public class Course implements Serializable {
 	@Column(name = "code")
 	private String code;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "subject_id")
 	private List<Subject> subjects;
 

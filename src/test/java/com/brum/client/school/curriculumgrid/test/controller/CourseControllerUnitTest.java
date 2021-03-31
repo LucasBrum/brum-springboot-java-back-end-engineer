@@ -60,7 +60,7 @@ public class CourseControllerUnitTest {
 	public void testListAll() {
 		Mockito.when(this.courseService.listAll()).thenReturn(new ArrayList<Course>());
 
-		ResponseEntity<Response<List<Course>>> courses = restTemplate.exchange(buildURI(), HttpMethod.GET, null,
+		ResponseEntity<Response<List<Course>>> courses = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(buildURI(), HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<Course>>>() {
 				});
 
@@ -87,7 +87,7 @@ public class CourseControllerUnitTest {
 	public void testFindById() {
 		Mockito.when(this.courseService.findById(1L)).thenReturn(course);
 
-		ResponseEntity<Response<Course>> course = restTemplate.exchange("http://localhost:" + this.port + "/courses/1",
+		ResponseEntity<Response<Course>> course = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange("http://localhost:" + this.port + "/courses/1",
 				HttpMethod.GET, null, new ParameterizedTypeReference<Response<Course>>() {
 				});
 
@@ -99,7 +99,7 @@ public class CourseControllerUnitTest {
 	public void testFindByCode() {
 		Mockito.when(this.courseService.findByCode("SI")).thenReturn(course);
 
-		ResponseEntity<Response<Course>> course = restTemplate.exchange(
+		ResponseEntity<Response<Course>> course = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"http://localhost:" + this.port + "/courses/code/SI", HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<Course>>() {
 				});
@@ -127,7 +127,7 @@ public class CourseControllerUnitTest {
 	public void testDeleteCourse() {
 		Mockito.when(this.courseService.delete(1L)).thenReturn(Boolean.TRUE);
 
-		ResponseEntity<Response<Boolean>> course = restTemplate.exchange("http://localhost:" + this.port + "/courses/1",
+		ResponseEntity<Response<Boolean>> course = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange("http://localhost:" + this.port + "/courses/1",
 				HttpMethod.DELETE, null, new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 

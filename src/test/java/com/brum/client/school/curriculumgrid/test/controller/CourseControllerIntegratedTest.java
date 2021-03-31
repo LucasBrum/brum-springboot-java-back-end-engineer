@@ -60,6 +60,41 @@ public class CourseControllerIntegratedTest {
 		createSubjectsInDatabase();
 		buildCourseInDataBase();
 	}
+	
+	private void buildCourseInDataBase() {
+		List<Subject> subjects = this.subjectRepository.findAll();
+
+		Course course1 = new Course();
+		course1.setName("Engenharia da Computação");
+		course1.setCode("EC");
+		course1.setSubjects(subjects);
+
+		this.courseRepository.save(course1);
+
+	}
+
+	private void createSubjectsInDatabase() {
+		Subject s1 = new Subject();
+		s1.setName("Introdução a Linguagem de Programação");
+		s1.setCode("ILP");
+		s1.setFrequency(1);
+		s1.setHours(64);
+
+		Subject s2 = new Subject();
+		s2.setName("Banco de Dados 1");
+		s2.setCode("BD1");
+		s2.setFrequency(1);
+		s2.setHours(82);
+
+		Subject s3 = new Subject();
+		s3.setName("Redes 1");
+		s3.setCode("RD1");
+		s3.setFrequency(1);
+		s3.setHours(100);
+
+		this.subjectRepository.saveAll(Arrays.asList(s1, s2, s3));
+
+	}
 
 	private String buildURI() {
 		return "http://localhost:" + this.port + "/courses/";
@@ -162,39 +197,6 @@ public class CourseControllerIntegratedTest {
 		assertEquals(200, response.getBody().getStatusCode());
 	}
 
-	private void buildCourseInDataBase() {
-		List<Subject> subjects = this.subjectRepository.findAll();
-
-		Course course1 = new Course();
-		course1.setName("Engenharia da Computação");
-		course1.setCode("EC");
-		course1.setSubjects(subjects);
-
-		this.courseRepository.save(course1);
-
-	}
-
-	private void createSubjectsInDatabase() {
-		Subject s1 = new Subject();
-		s1.setName("Introdução a Linguagem de Programação");
-		s1.setCode("ILP");
-		s1.setFrequency(1);
-		s1.setHours(64);
-
-		Subject s2 = new Subject();
-		s2.setName("Banco de Dados 1");
-		s2.setCode("BD1");
-		s2.setFrequency(1);
-		s2.setHours(82);
-
-		Subject s3 = new Subject();
-		s3.setName("Redes 1");
-		s3.setCode("RD1");
-		s3.setFrequency(1);
-		s3.setHours(100);
-
-		this.subjectRepository.saveAll(Arrays.asList(s1, s2, s3));
-
-	}
+	
 
 }
