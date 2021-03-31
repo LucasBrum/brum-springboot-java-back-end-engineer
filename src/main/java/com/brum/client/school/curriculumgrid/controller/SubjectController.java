@@ -17,19 +17,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.brum.client.school.curriculumgrid.config.SwaggerConfig;
 import com.brum.client.school.curriculumgrid.dto.SubjectDto;
 import com.brum.client.school.curriculumgrid.enums.HyperLinkConstant;
 import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.service.SubjectService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping("/subjects")
+@Api(tags = SwaggerConfig.SUBJECT)
 public class SubjectController {
 	
 	@Autowired
 	private SubjectService subjectService;
 	
 	@GetMapping
+	@ApiOperation(value = "List all subjects")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Subject Listed with success"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
 	public ResponseEntity<Response<List<SubjectDto>>> listAll() {
 		
 		List<SubjectDto> subjectsList = this.subjectService.listAll();
@@ -45,6 +57,11 @@ public class SubjectController {
 	}
 	
 	@PostMapping
+	@ApiOperation(value = "Create a new Subject")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Subject created with success"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
 	public ResponseEntity<Response<Boolean>> create(@Valid @RequestBody SubjectDto subjectDto) {
 		Boolean isSubjectCreated = this.subjectService.create(subjectDto);
 		
@@ -57,6 +74,13 @@ public class SubjectController {
 	}
 	
 	@GetMapping("/{id}")
+	@ApiOperation(value = "Find Subject by id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Subject Found with success"),
+			@ApiResponse(code = 400, message = "Request error sent by client"),
+			@ApiResponse(code = 404, message = "Subject not found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
 	public ResponseEntity<Response<SubjectDto>> findById(@PathVariable Long id) {
 		
 		SubjectDto subjectDto = this.subjectService.findById(id);
@@ -72,6 +96,15 @@ public class SubjectController {
 	}
 	
 	@PutMapping
+	@ApiOperation(value = "Update Subject")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Subject updated with success"),
+			@ApiResponse(code = 404, message = "Subject not found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+			
+			
+
+	})
 	public ResponseEntity<Response<Boolean>> update(@Valid @RequestBody SubjectDto subjectDto) {
 		
 		Boolean isSubjectUpdated = this.subjectService.update(subjectDto);
@@ -85,6 +118,12 @@ public class SubjectController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@ApiOperation(value = "Delete Subject")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Subject deleted with success"),
+			@ApiResponse(code = 400, message = "Request error sent by user"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
 	public ResponseEntity<Response<Boolean>> delete(@PathVariable Long id) {
 		Boolean isSubjectDeleted = this.subjectService.delete(id);
 		
@@ -97,6 +136,13 @@ public class SubjectController {
 	}
 	
 	@GetMapping("/min-hour/{minHour}")
+	@ApiOperation(value = "Find Subject by min hour")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Subject Found with success"),
+			@ApiResponse(code = 400, message = "Request error sent by client"),
+			@ApiResponse(code = 404, message = "Subject not found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
 	public ResponseEntity<Response<List<SubjectDto>>> findByMinHour(@PathVariable int minHour) {
 		
 		Response<List<SubjectDto>> response = new Response<>();
@@ -109,6 +155,13 @@ public class SubjectController {
 	}
 	
 	@GetMapping("/min-frequency/{frequency}")
+	@ApiOperation(value = "Find Subject by frequency")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Subject Found with success"),
+			@ApiResponse(code = 400, message = "Request error sent by client"),
+			@ApiResponse(code = 404, message = "Subject not found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
 	public ResponseEntity<Response<List<SubjectDto>>> findByFrequency(@PathVariable int frequency) {
 		Response<List<SubjectDto>> response = new Response<>();
 		List<SubjectDto> subjectsList = this.subjectService.findByFrequency(frequency);

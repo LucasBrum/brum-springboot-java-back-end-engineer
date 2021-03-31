@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -22,12 +23,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig extends WebMvcConfigurationSupport {
+	
+	public static final String COURSE = "COURSE";
+	public static final String SUBJECT = "SUBJECT";
 
 	@Bean
 	public Docket curriculumGridApi() {
-		return new Docket(DocumentationType.SWAGGER_2).select()
+		return new Docket(DocumentationType.SWAGGER_2).useDefaultResponseMessages(false).select()
 				.apis(RequestHandlerSelectors.basePackage("com.brum.client.school.curriculumgrid")).build()
-				.apiInfo(this.metaData());
+				.apiInfo(this.metaData())
+				.tags(new Tag(COURSE, "Operations to manipulate Course entity"), new Tag(SUBJECT, "Operations to manipulate Subject entity"));
 	}
 	
 	@Bean

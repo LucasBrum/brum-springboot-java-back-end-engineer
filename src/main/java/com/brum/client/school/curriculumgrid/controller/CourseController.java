@@ -16,19 +16,47 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.brum.client.school.curriculumgrid.config.SwaggerConfig;
 import com.brum.client.school.curriculumgrid.dto.CourseDto;
 import com.brum.client.school.curriculumgrid.entity.Course;
 import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.service.CourseService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping("/courses")
+@Api(tags = SwaggerConfig.COURSE)
 public class CourseController {
 
 	@Autowired
 	private CourseService courseService;
 
+	@PostMapping
+	@ApiOperation(value = "Create a new course")
+	@ApiResponses(value = { @ApiResponse(code = 201, message = "Course created with success"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
+	public ResponseEntity<Response<Boolean>> create(@Valid @RequestBody CourseDto courseDto) {
+		Boolean isCourseCreated = this.courseService.create(courseDto);
+
+		Response<Boolean> response = new Response<>();
+		response.setData(isCourseCreated);
+		response.setStatusCode(HttpStatus.CREATED.value());
+
+		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
 	@GetMapping
+	@ApiOperation(value = "List all courses")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Course Listed with success"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
 	public ResponseEntity<Response<List<Course>>> listAll() {
 		List<Course> coursesList = this.courseService.listAll();
 
@@ -41,18 +69,14 @@ public class CourseController {
 
 	}
 
-	@PostMapping
-	public ResponseEntity<Response<Boolean>> create(@Valid @RequestBody CourseDto courseDto) {
-		Boolean isCourseCreated = this.courseService.create(courseDto);
-
-		Response<Boolean> response = new Response<>();
-		response.setData(isCourseCreated);
-		response.setStatusCode(HttpStatus.CREATED.value());
-
-		return ResponseEntity.status(HttpStatus.CREATED).body(response);
-	}
-
 	@GetMapping("/{id}")
+	@ApiOperation(value = "Find Course by id")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Course Found with success"),
+			@ApiResponse(code = 400, message = "Request error sent by client"),
+			@ApiResponse(code = 404, message = "Course not found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
 	public ResponseEntity<Response<Course>> findById(@PathVariable Long id) {
 
 		Course course = this.courseService.findById(id);
@@ -66,6 +90,11 @@ public class CourseController {
 	}
 
 	@GetMapping("/code/{code}")
+	@ApiOperation(value = "Find Course by code")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Course found with success"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
 	public ResponseEntity<Response<Course>> findByCode(@PathVariable String code) {
 		Course course = this.courseService.findByCode(code);
 
@@ -77,9 +106,18 @@ public class CourseController {
 	}
 
 	@PutMapping
+	@ApiOperation(value = "Update Course")
+	@ApiResponses(value = { 
+			@ApiResponse(code = 200, message = "Course updated with success"),
+			@ApiResponse(code = 404, message = "Course not found"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+			
+			
+
+	})
 	public ResponseEntity<Response<Boolean>> update(@Valid @RequestBody CourseDto courseDto) {
 		Boolean isCourseUpdated = this.courseService.update(courseDto);
-		
+
 		Response<Boolean> response = new Response<>();
 		response.setData(isCourseUpdated);
 		response.setStatusCode(HttpStatus.OK.value());
@@ -88,10 +126,16 @@ public class CourseController {
 	}
 
 	@DeleteMapping("/{id}")
+	@ApiOperation(value = "Delete Course")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Course deleted with success"),
+			@ApiResponse(code = 400, message = "Request error sent by user"),
+			@ApiResponse(code = 500, message = "Internal Server Error")
+
+	})
 	public ResponseEntity<Response<Boolean>> delete(@PathVariable Long id) {
-		
+
 		Boolean isCourseDeleted = this.courseService.delete(id);
-		
+
 		Response<Boolean> response = new Response<>();
 		response.setData(isCourseDeleted);
 		response.setStatusCode(HttpStatus.OK.value());
