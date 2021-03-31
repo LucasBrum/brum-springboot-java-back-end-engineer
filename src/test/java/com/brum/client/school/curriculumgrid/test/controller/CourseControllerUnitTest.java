@@ -75,7 +75,7 @@ public class CourseControllerUnitTest {
 
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 
-		ResponseEntity<Response<Boolean>> course = restTemplate.exchange(buildURI(), HttpMethod.POST, request,
+		ResponseEntity<Response<Boolean>> course = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(buildURI(), HttpMethod.POST, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 
@@ -114,7 +114,7 @@ public class CourseControllerUnitTest {
 
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 
-		ResponseEntity<Response<Boolean>> course = restTemplate.exchange(buildURI(), HttpMethod.PUT, request,
+		ResponseEntity<Response<Boolean>> course = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(buildURI(), HttpMethod.PUT, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 

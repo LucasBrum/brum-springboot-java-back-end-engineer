@@ -62,7 +62,6 @@ public class SubjectServiceUnitTest {
 		assertNotNull(subjectsDtoList);
 		assertEquals("ILP", subjectsDtoList.get(0).getCode());
 		assertEquals(1, subjectsDtoList.get(0).getId());
-		assertEquals("/subjects/1", subjectsDtoList.get(0).getLinks().getRequiredLink("self").getHref());
 		assertEquals(1, subjectsDtoList.size());
 
 		Mockito.verify(this.subjectRepository, times(1)).findAll();

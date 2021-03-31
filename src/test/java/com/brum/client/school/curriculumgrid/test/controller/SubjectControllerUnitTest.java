@@ -73,7 +73,7 @@ public class SubjectControllerUnitTest {
 
 		HttpEntity<SubjectDto> request = new HttpEntity<>(subjectDto);
 
-		ResponseEntity<Response<Boolean>> subject = restTemplate.exchange(
+		ResponseEntity<Response<Boolean>> subject = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/", HttpMethod.POST, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
@@ -86,7 +86,7 @@ public class SubjectControllerUnitTest {
 	public void testFindSubjectById() {
 		Mockito.when(this.subjectService.findById(1L)).thenReturn(subjectDto);
 
-		ResponseEntity<Response<SubjectDto>> subject = restTemplate.exchange(
+		ResponseEntity<Response<SubjectDto>> subject = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/1", HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<SubjectDto>>() {
 				});
@@ -101,7 +101,7 @@ public class SubjectControllerUnitTest {
 
 		HttpEntity<SubjectDto> subjectRequest = new HttpEntity<>(subjectDto);
 
-		ResponseEntity<Response<Boolean>> subject = restTemplate.exchange(
+		ResponseEntity<Response<Boolean>> subject = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/", HttpMethod.PUT, subjectRequest,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
@@ -114,7 +114,7 @@ public class SubjectControllerUnitTest {
 	public void testDeleteSubject() {
 		Mockito.when(this.subjectService.delete(1L)).thenReturn(Boolean.TRUE);
 
-		ResponseEntity<Response<Boolean>> subject = restTemplate.exchange(
+		ResponseEntity<Response<Boolean>> subject = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/1", HttpMethod.DELETE, null,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});

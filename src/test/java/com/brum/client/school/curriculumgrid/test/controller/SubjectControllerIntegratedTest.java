@@ -77,7 +77,8 @@ public class SubjectControllerIntegratedTest {
 
 	@Test
 	public void testListAllSubjects() {
-		ResponseEntity<Response<List<SubjectDto>>> subjects = restTemplate.exchange(buildURI(), HttpMethod.GET, null,
+		ResponseEntity<Response<List<SubjectDto>>> subjects = restTemplate.withBasicAuth("rasmoo", "rasmoo123")
+				.exchange(buildURI(), HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<SubjectDto>>>() {
 				});
 
@@ -93,7 +94,7 @@ public class SubjectControllerIntegratedTest {
 		List<Subject> subjectList = this.subjectRepository.findAll();
 		Long id = subjectList.get(0).getId();
 
-		ResponseEntity<Response<SubjectDto>> subject = restTemplate.exchange(
+		ResponseEntity<Response<SubjectDto>> subject = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"http://localhost:" + this.port + "/subjects/" + id, HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<SubjectDto>>() {
 				});
@@ -105,7 +106,7 @@ public class SubjectControllerIntegratedTest {
 
 	@Test
 	public void testFindSubjectByMinHour() {
-		ResponseEntity<Response<List<SubjectDto>>> subject = restTemplate.exchange(
+		ResponseEntity<Response<List<SubjectDto>>> subject = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/min-hour/80", HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<SubjectDto>>>() {
 				});
@@ -117,7 +118,7 @@ public class SubjectControllerIntegratedTest {
 
 	@Test
 	public void testFindSubjectByFrequency() {
-		ResponseEntity<Response<List<SubjectDto>>> subject = restTemplate.exchange(
+		ResponseEntity<Response<List<SubjectDto>>> subject = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/min-frequency/1", HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<SubjectDto>>>() {
 				});
@@ -137,7 +138,7 @@ public class SubjectControllerIntegratedTest {
 
 		HttpEntity<Subject> subjectRequest = new HttpEntity<>(subject);
 
-		ResponseEntity<Response<Boolean>> subjects = restTemplate.exchange(
+		ResponseEntity<Response<Boolean>> subjects = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/", HttpMethod.PUT, subjectRequest,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
@@ -154,7 +155,7 @@ public class SubjectControllerIntegratedTest {
 		List<Subject> listSubjects = this.subjectRepository.findAll();
 		Long id = listSubjects.get(0).getId();
 
-		ResponseEntity<Response<Boolean>> subject = restTemplate.exchange(
+		ResponseEntity<Response<Boolean>> subject = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/" + id, HttpMethod.DELETE, null,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
@@ -172,7 +173,7 @@ public class SubjectControllerIntegratedTest {
 
 		HttpEntity<Subject> request = new HttpEntity<>(subject);
 
-		ResponseEntity<Response<Boolean>> subjectResponse = restTemplate.exchange(
+		ResponseEntity<Response<Boolean>> subjectResponse = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"Http://localhost:" + this.port + "/subjects/", HttpMethod.POST, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});

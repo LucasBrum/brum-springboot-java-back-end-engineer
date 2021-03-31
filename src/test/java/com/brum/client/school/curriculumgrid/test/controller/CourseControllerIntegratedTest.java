@@ -67,7 +67,8 @@ public class CourseControllerIntegratedTest {
 
 	@Test
 	public void testListAllCourses() {
-		ResponseEntity<Response<List<Course>>> courses = restTemplate.exchange(buildURI(), HttpMethod.GET, null,
+		ResponseEntity<Response<List<Course>>> courses = restTemplate.withBasicAuth("rasmoo", "rasmoo123")
+				.exchange(buildURI(), HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<Course>>>() {
 				});
 
@@ -82,7 +83,7 @@ public class CourseControllerIntegratedTest {
 
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 
-		ResponseEntity<Response<Boolean>> response = restTemplate.exchange(buildURI(), HttpMethod.POST, request,
+		ResponseEntity<Response<Boolean>> response = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(buildURI(), HttpMethod.POST, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 
@@ -98,7 +99,7 @@ public class CourseControllerIntegratedTest {
 		List<Course> courseList = this.courseRepository.findAll();
 		Long id = courseList.get(0).getId();
 
-		ResponseEntity<Response<Course>> course = restTemplate.exchange(
+		ResponseEntity<Response<Course>> course = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"http://localhost:" + this.port + "/courses/" + id, HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<Course>>() {
 				});
@@ -110,7 +111,7 @@ public class CourseControllerIntegratedTest {
 
 	@Test
 	public void testFindCourseByCode() {
-		ResponseEntity<Response<Course>> course = restTemplate.exchange(
+		ResponseEntity<Response<Course>> course = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"http://localhost:" + this.port + "/courses/code/EC", HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<Course>>() {
 				});
@@ -133,7 +134,7 @@ public class CourseControllerIntegratedTest {
 
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 
-		ResponseEntity<Response<Boolean>> response = restTemplate.exchange(buildURI(), HttpMethod.PUT, request,
+		ResponseEntity<Response<Boolean>> response = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(buildURI(), HttpMethod.PUT, request,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 
@@ -149,7 +150,7 @@ public class CourseControllerIntegratedTest {
 		List<Course> listCourses = this.courseRepository.findAll();
 		Long id = listCourses.get(0).getId();
 
-		ResponseEntity<Response<Boolean>> response = restTemplate.exchange(
+		ResponseEntity<Response<Boolean>> response = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(
 				"http://localhost:" + this.port + "/courses/" + id, HttpMethod.DELETE, null,
 				new ParameterizedTypeReference<Response<Boolean>>() {
 				});

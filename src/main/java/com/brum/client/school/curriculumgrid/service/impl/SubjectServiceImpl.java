@@ -8,11 +8,9 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.brum.client.school.curriculumgrid.controller.SubjectController;
 import com.brum.client.school.curriculumgrid.dto.SubjectDto;
 import com.brum.client.school.curriculumgrid.entity.Subject;
 import com.brum.client.school.curriculumgrid.enums.ExceptionMessageEnum;
@@ -115,10 +113,6 @@ public class SubjectServiceImpl implements SubjectService {
 
 			List<SubjectDto> subjectDtosList = this.mapper.map(subjectList, new TypeToken<List<SubjectDto>>() {
 			}.getType());
-
-			subjectDtosList.forEach(subject -> subject.add(WebMvcLinkBuilder
-					.linkTo(WebMvcLinkBuilder.methodOn(SubjectController.class).findById(subject.getId()))
-					.withSelfRel()));
 
 			return subjectDtosList;
 
