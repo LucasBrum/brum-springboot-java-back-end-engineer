@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class SubjectDto extends RepresentationModel<SubjectDto>{
+public class SubjectDto {
 	
 	private Long id;
 	
