@@ -1,4 +1,4 @@
-package com.brum.client.financescontroll.entity;
+package com.brum.client.school.curriculumgrid.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.brum.client.financescontroll.enums.TypeEnum;
+import com.brum.client.school.curriculumgrid.enums.TypeEnum;
 
 import lombok.Data;
 

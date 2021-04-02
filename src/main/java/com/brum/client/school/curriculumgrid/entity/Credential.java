@@ -1,4 +1,4 @@
-package com.brum.client.financescontroll.entity;
+package com.brum.client.school.curriculumgrid.entity;
 
 import javax.persistence.Embeddable;
 
