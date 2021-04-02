@@ -14,7 +14,7 @@ import lombok.Data;
 @Data
 @Entity
 public class Category implements Serializable{
-	private static final long serialVersionUID = 4167460889626285518L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(generator = "increment")
