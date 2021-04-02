@@ -20,7 +20,7 @@ import lombok.Data;
 @Data
 @Entity
 public class User implements Serializable{
-	private static final long serialVersionUID = -6227685015951211718L;
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "id")
