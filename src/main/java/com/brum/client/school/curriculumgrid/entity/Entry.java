@@ -23,20 +23,16 @@ public class Entry implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
 	
-	@Column(name = "type")
-	private TypeEnum tipo;
+	private TypeEnum type;
 	
-	@Column(name = "date")
-	private Date data = new Date();
+	private Date date = new Date();
 	
-	@Column(name = "value")
-	private int valor;
+	private int value;
 	
 	@OneToOne(cascade = CascadeType.REFRESH)
-	private Category categoria = new Category();
+	private Category category = new Category();
 }

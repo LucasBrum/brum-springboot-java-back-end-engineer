@@ -21,9 +21,7 @@ public class Category implements Serializable{
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
 	
-	@Column(name = "name")
-	private String nome;
+	private String name;
 	
-	@Column(name = "desciption")
-	private String descricao;
+	private String description;
 }

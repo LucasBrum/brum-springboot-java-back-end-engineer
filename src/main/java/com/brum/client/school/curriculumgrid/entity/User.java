@@ -21,28 +21,25 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "usuario")
+@Table(name = "user")
 @NoArgsConstructor
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "id")
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
 	
-	@Column(name = "name")
-	private String nome;
+	private String name;
 
 	@JsonIgnore
-	@Column(name = "credential")
-	private Credential credencial = new Credential();
+	private Credential credential = new Credential();
 
 	@ManyToMany
 	@JoinTable(name = "user_has_entries", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "entry_id") })
 	@Column(name = "entry")
-	private List<Entry> lancamento;
+	private List<Entry> entries;
 
 }

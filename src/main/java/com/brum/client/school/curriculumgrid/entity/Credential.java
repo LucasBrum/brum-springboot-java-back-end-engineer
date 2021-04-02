@@ -10,6 +10,6 @@ public class Credential {
 	
 	private String email;
 
-	private String senha;
+	private String password;
 	
 }
