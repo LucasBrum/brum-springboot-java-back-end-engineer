@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import com.brum.client.financescontroll.enums.TypeEnum;
+import com.brum.client.school.curriculumgrid.enums.TypeEnum;
 
 import lombok.Data;
 
