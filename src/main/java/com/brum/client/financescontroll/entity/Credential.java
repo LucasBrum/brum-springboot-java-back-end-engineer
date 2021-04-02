@@ -4,8 +4,8 @@ import javax.persistence.Embeddable;
 
 import lombok.Data;
 
-@Embeddable
 @Data
+@Embeddable
 public class Credential {
 	
 	private String email;

@@ -1,5 +1,6 @@
 package com.brum.client.financescontroll.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -9,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 import com.brum.client.financescontroll.enums.TypeEnum;
 
@@ -17,9 +17,10 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "ENTRY")
-public class Entry {
+public class Entry implements Serializable{
 	
+	private static final long serialVersionUID = -6915675231972324665L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")

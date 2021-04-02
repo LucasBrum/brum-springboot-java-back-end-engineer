@@ -1,5 +1,6 @@
 package com.brum.client.financescontroll.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,8 +18,8 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "USER")
-public class User {
+public class User implements Serializable{
+	private static final long serialVersionUID = -6227685015951211718L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
