@@ -1,11 +1,11 @@
-package com.brum.client.school.curriculumgrid.entity;
+package com.brum.client.financescontroll.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -13,6 +13,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "tb_category")
 public class Category implements Serializable{
 	private static final long serialVersionUID = 1L;
 

@@ -1,4 +1,4 @@
-package com.brum.client.school.curriculumgrid.entity;
+package com.brum.client.financescontroll.entity;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "user")
 @NoArgsConstructor
+@Table(name = "tb_user")
 public class User implements Serializable{
 	private static final long serialVersionUID = 1L;
 

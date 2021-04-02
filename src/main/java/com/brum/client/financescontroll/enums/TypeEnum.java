@@ -1,4 +1,4 @@
-package com.brum.client.school.curriculumgrid.enums;
+package com.brum.client.financescontroll.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
