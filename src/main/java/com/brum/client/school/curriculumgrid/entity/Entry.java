@@ -6,14 +6,17 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 import com.brum.client.school.curriculumgrid.enums.TypeEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -41,4 +44,8 @@ public class Entry implements Serializable{
 	
 	@OneToOne(cascade = CascadeType.REFRESH)
 	private Category category = new Category();
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	private User user;
 }

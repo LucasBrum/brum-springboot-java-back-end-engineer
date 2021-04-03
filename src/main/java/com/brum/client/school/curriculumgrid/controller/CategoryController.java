@@ -7,8 +7,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +21,7 @@ import com.brum.client.school.curriculumgrid.entity.Category;
 import com.brum.client.school.curriculumgrid.entity.User;
 import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.repository.CategoryRepository;
-import com.brum.client.school.curriculumgrid.repository.UserRepository;
+import com.brum.client.school.curriculumgrid.service.UserInfoService;
 
 @RestController
 @RequestMapping("/categories")
@@ -32,23 +30,23 @@ public class CategoryController {
 	private ModelMapper mapper = new ModelMapper();
 
 	@Autowired
+	private UserInfoService userInfoService;
+	
+	@Autowired
 	private CategoryRepository categoryRepository;
 
-	@Autowired
-	private UserRepository userRepository;
-
 	@PostMapping
-	public ResponseEntity<Response<Category>> create(@RequestBody CategoryDTO categoryDto) {
+	public ResponseEntity<Response<Category>> createCategory(@RequestBody CategoryDTO categoryDto) {
 
 		Response<Category> response = new Response<>();
 
 		try {
 
-			Optional<User> user = getAuthenticatedUser();
+			User user = userInfoService.getAuthenticatedUser();
 
 			if (categoryDto != null && categoryDto.getId() == null) {
 				Category category = this.categoryRepository.save(mapper.map(categoryDto, Category.class));
-				category.setUser(user.get());
+				category.setUser(user);
 				response.setData(this.categoryRepository.save(category));
 				response.setStatusCode(HttpStatus.CREATED.value());
 
@@ -64,16 +62,16 @@ public class CategoryController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Response<Category>> atualizarCategoria(@RequestBody CategoryDTO categoryDto) {
+	public ResponseEntity<Response<Category>> updateCategory(@RequestBody CategoryDTO categoryDto) {
 		Response<Category> response = new Response<>();
 		try {
 			
-			Optional<User> user = getAuthenticatedUser();
+			User user = userInfoService.getAuthenticatedUser();
 			
 			if (categoryDto != null && categoryDto.getId() != null) {
 				Optional<Category> category = this.categoryRepository.findById(categoryDto.getId());
-				if (category.isPresent()) {
-					categoryDto.setUser(user.get());
+				if (category.isPresent() && category.get().getUser().getId().equals(user.getId())) {
+					categoryDto.setUser(user);
 					response.setData(this.categoryRepository.save(mapper.map(categoryDto, Category.class)));
 					response.setStatusCode(HttpStatus.OK.value());
 					return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -89,10 +87,11 @@ public class CategoryController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Response<List<Category>>> listarCategorias() {
+	public ResponseEntity<Response<List<Category>>> listAllCategories() {
 		Response<List<Category>> response = new Response<>();
 		try {
-			response.setData(this.categoryRepository.findAll());
+			User user = userInfoService.getAuthenticatedUser();
+			response.setData(this.categoryRepository.findAllByUserId(user.getId()));
 			response.setStatusCode(HttpStatus.OK.value());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		} catch (Exception e) {
@@ -104,7 +103,7 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Response<Category>> consultarCategoria(@PathVariable Long id) {
+	public ResponseEntity<Response<Category>> consultCategory(@PathVariable Long id) {
 		Response<Category> response = new Response<>();
 		try {
 			Optional<Category> category = this.categoryRepository.findById(id);
@@ -122,7 +121,7 @@ public class CategoryController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Response<Boolean>> excluirCategoria(@PathVariable Long id) {
+	public ResponseEntity<Response<Boolean>> deleteCategory(@PathVariable Long id) {
 		Response<Boolean> response = new Response<>();
 		try {
 			if (this.categoryRepository.findById(id).isPresent()) {
@@ -139,14 +138,4 @@ public class CategoryController {
 
 	}
 
-	private Optional<User> getAuthenticatedUser() throws Exception {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		Optional<User> user = this.userRepository.findByEmail(auth.getName());
-
-		if (!user.isPresent()) {
-			throw new Exception();
-		}
-		return user;
-	}
 }

@@ -18,13 +18,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.brum.client.school.curriculumgrid.dto.EntryDTO;
 import com.brum.client.school.curriculumgrid.entity.Category;
 import com.brum.client.school.curriculumgrid.entity.Entry;
+import com.brum.client.school.curriculumgrid.entity.User;
 import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.repository.CategoryRepository;
 import com.brum.client.school.curriculumgrid.repository.EntryRepository;
+import com.brum.client.school.curriculumgrid.service.UserInfoService;
 
 @RestController
 @RequestMapping("/entries")
 public class EntryController {
+	
+	@Autowired
+	private UserInfoService userInfoService;
 	
 	@Autowired
 	private EntryRepository entryRepository;
@@ -36,15 +41,17 @@ public class EntryController {
 	public ResponseEntity<Response<Entry>> cadastrarLancamento(@RequestBody EntryDTO entryDto) {
 		Response<Entry> response = new Response<>();
 		try {
-			Optional<Category> category = this.categoryRepository.findById(entryDto.getCategoryId());
+			
+			User user = this.userInfoService.getAuthenticatedUser();
+			Optional<Category> category = this.categoryRepository.findByUserId(entryDto.getCategoryId(), user.getId());
 			if (entryDto.getId() == null && category.isPresent()) {
 
 				Entry entry = new Entry();
 
 				entry.setCategory(category.get());
 				entry.setType(entryDto.getType());
-				entry.setValue(entryDto.getValor());
-
+				entry.setValue(entryDto.getValue());
+				entry.setUser(user);
 				response.setData(this.entryRepository.save(entry));
 				response.setStatusCode(HttpStatus.CREATED.value());
 				return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -62,17 +69,17 @@ public class EntryController {
 	public ResponseEntity<Response<Entry>> atualizarLancamento(@RequestBody EntryDTO entryDto) {
 		Response<Entry> response = new Response<>();
 		try {
-
-			Optional<Category> category = this.categoryRepository.findById(entryDto.getCategoryId());
-			Optional<Entry> entry = this.entryRepository.findById(entryDto.getId());
-			if (entry.isPresent() && category.isPresent()) {
+			User user = this.userInfoService.getAuthenticatedUser();
+			Optional<Category> category = this.categoryRepository.findByUserId(entryDto.getCategoryId(), user.getId());
+			Optional<Entry> entryFounded = this.entryRepository.findById(entryDto.getId());
+			if (entryFounded.isPresent() && category.isPresent()) {
+				Entry entry = entryFounded.get();
 				
-				Entry lancamento = entry.get();
-				lancamento.setCategory(category.get());
-				lancamento.setType(entryDto.getType());
-				lancamento.setValue(entryDto.getValor());
+				entry.setCategory(category.get());
+				entry.setType(entryDto.getType());
+				entry.setValue(entryDto.getValue());
 				
-				response.setData(this.entryRepository.save(lancamento));
+				response.setData(this.entryRepository.save(entry));
 				response.setStatusCode(HttpStatus.OK.value());
 				return ResponseEntity.status(HttpStatus.OK).body(response);
 			}
@@ -86,10 +93,12 @@ public class EntryController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Response<List<Entry>>> listarLancamentos() {
+	public ResponseEntity<Response<List<Entry>>> listEntries() {
 		Response<List<Entry>> response = new Response<>();
 		try {
-			response.setData(this.entryRepository.findAll());
+			User user = this.userInfoService.getAuthenticatedUser();
+			
+			response.setData(this.entryRepository.findAllByUserId(user.getId()));
 			response.setStatusCode(HttpStatus.OK.value());
 			return ResponseEntity.status(HttpStatus.OK).body(response);
 		} catch (Exception e) {

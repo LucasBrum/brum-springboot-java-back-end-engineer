@@ -14,7 +14,7 @@ public class EntryDTO {
 
 	private Date date = new Date();
 
-	private int valor;
+	private int value;
 
 	private Long categoryId;
 }
