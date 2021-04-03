@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -24,7 +25,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "tb_user")
 public class User implements Serializable{
-	private static final long serialVersionUID = 1L;
+	
+	private static final long serialVersionUID = 4947066108504508475L;
 
 	@Id
 	@GeneratedValue(generator = "increment")
@@ -36,7 +38,7 @@ public class User implements Serializable{
 	@JsonIgnore
 	private Credential credential = new Credential();
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "tb_user_has_entries", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "entry_id") })
 	@Column(name = "entry")
