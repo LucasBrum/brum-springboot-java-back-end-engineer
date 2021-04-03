@@ -60,7 +60,7 @@ public class CourseControllerIntegratedTest {
 		createSubjectsInDatabase();
 		buildCourseInDataBase();
 	}
-	
+
 	private void buildCourseInDataBase() {
 		List<Subject> subjects = this.subjectRepository.findAll();
 
@@ -102,9 +102,9 @@ public class CourseControllerIntegratedTest {
 
 	@Test
 	public void testListAllCourses() {
-		ResponseEntity<Response<List<Course>>> courses = restTemplate.withBasicAuth("rasmoo", "rasmoo123")
-				.exchange(buildURI(), HttpMethod.GET, null,
-				new ParameterizedTypeReference<Response<List<Course>>>() {
+		ResponseEntity<Response<List<Course>>> courses = restTemplate
+				.withBasicAuth("rasmoo", "$2a$10$RqGILYfa2BFYvw.bMtaMYOeZYYUY5NUOSTIrSb4AXt0rOoll9EQwS")
+				.exchange(buildURI(), HttpMethod.GET, null, new ParameterizedTypeReference<Response<List<Course>>>() {
 				});
 
 		assertNotNull(courses.getBody().getData());
@@ -118,8 +118,8 @@ public class CourseControllerIntegratedTest {
 
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 
-		ResponseEntity<Response<Boolean>> response = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(buildURI(), HttpMethod.POST, request,
-				new ParameterizedTypeReference<Response<Boolean>>() {
+		ResponseEntity<Response<Boolean>> response = restTemplate.withBasicAuth("rasmoo", "rasmoo123")
+				.exchange(buildURI(), HttpMethod.POST, request, new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 
 		List<Course> coursesList = this.courseRepository.findAll();
@@ -169,8 +169,8 @@ public class CourseControllerIntegratedTest {
 
 		HttpEntity<CourseDto> request = new HttpEntity<>(courseDto);
 
-		ResponseEntity<Response<Boolean>> response = restTemplate.withBasicAuth("rasmoo", "rasmoo123").exchange(buildURI(), HttpMethod.PUT, request,
-				new ParameterizedTypeReference<Response<Boolean>>() {
+		ResponseEntity<Response<Boolean>> response = restTemplate.withBasicAuth("rasmoo", "rasmoo123")
+				.exchange(buildURI(), HttpMethod.PUT, request, new ParameterizedTypeReference<Response<Boolean>>() {
 				});
 
 		Optional<Course> courseUpdated = this.courseRepository.findById(course.getId());
@@ -196,7 +196,5 @@ public class CourseControllerIntegratedTest {
 		assertEquals(0, coursesList.size());
 		assertEquals(200, response.getBody().getStatusCode());
 	}
-
-	
 
 }

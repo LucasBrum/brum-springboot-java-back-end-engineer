@@ -8,7 +8,8 @@ public enum ExceptionMessageEnum {
 	INTERNAL_ERROR("Internal error identified. Please contact customer support."),
 	SUBJECT_NOT_FOUND("Subject Not Found."),
 	COURSE_NOT_FOUND("Course Not Found"),
-	ERROR_ID_INFORMED("Error! Id Informed.");
+	ERROR_ID_INFORMED("Error! Id Informed."),
+	USERNAME_NOTFOUND("Username Not Found");
 	
 	private final String value;
 	

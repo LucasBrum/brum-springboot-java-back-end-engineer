@@ -1,5 +1,9 @@
+logging:
+  level:
+    org:
+      springframework:
+        web: INFO
 server:
-  port: 8081
   servlet:
     contextPath: /
 spring:
@@ -7,9 +11,6 @@ spring:
     driverClassName: org.postgresql.Driver
 
     url: ${DATABASE_URL}
-  h2:
-    console:
-      enabled: true
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -42,5 +43,15 @@ public class ResourceHandler {
 		response.setData(erros);
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
+	
+	@ExceptionHandler(UsernameNotFoundException.class)
+	public ResponseEntity<Response<String>> handlerUsernameNotFoundException(UsernameNotFoundException usernameNotFoundException) {
+		Response<String> response = new Response<>();
+		response.setStatusCode(HttpStatus.NOT_FOUND.value());
+		response.setData(usernameNotFoundException.getMessage());
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+		
 	}
 }
