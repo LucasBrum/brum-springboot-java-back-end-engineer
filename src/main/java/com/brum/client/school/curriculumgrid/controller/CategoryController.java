@@ -3,12 +3,11 @@ package com.brum.client.school.curriculumgrid.controller;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,13 +44,7 @@ public class CategoryController {
 
 		try {
 
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-			Optional<User> user = this.userRepository.findByEmail(auth.getName());
-
-			if (!user.isPresent()) {
-				throw new Exception();
-			}
+			Optional<User> user = getAuthenticatedUser();
 
 			if (categoryDto != null && categoryDto.getId() == null) {
 				Category category = this.categoryRepository.save(mapper.map(categoryDto, Category.class));
@@ -74,9 +67,13 @@ public class CategoryController {
 	public ResponseEntity<Response<Category>> atualizarCategoria(@RequestBody CategoryDTO categoryDto) {
 		Response<Category> response = new Response<>();
 		try {
+			
+			Optional<User> user = getAuthenticatedUser();
+			
 			if (categoryDto != null && categoryDto.getId() != null) {
 				Optional<Category> category = this.categoryRepository.findById(categoryDto.getId());
 				if (category.isPresent()) {
+					categoryDto.setUser(user.get());
 					response.setData(this.categoryRepository.save(mapper.map(categoryDto, Category.class)));
 					response.setStatusCode(HttpStatus.OK.value());
 					return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -140,5 +137,16 @@ public class CategoryController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 		}
 
+	}
+
+	private Optional<User> getAuthenticatedUser() throws Exception {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		Optional<User> user = this.userRepository.findByEmail(auth.getName());
+
+		if (!user.isPresent()) {
+			throw new Exception();
+		}
+		return user;
 	}
 }
