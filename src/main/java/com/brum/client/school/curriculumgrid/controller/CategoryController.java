@@ -24,7 +24,7 @@ import com.brum.client.school.curriculumgrid.repository.CategoryRepository;
 import com.brum.client.school.curriculumgrid.service.UserInfoService;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping({"/categories","/v2/categories"})
 public class CategoryController {
 
 	private ModelMapper mapper = new ModelMapper();
