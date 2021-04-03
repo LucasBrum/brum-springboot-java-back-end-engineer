@@ -20,7 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		String[] allowed = new String[] {
-				"/webjars", "/usuario","/static/**"
+				"/webjars", "/users","/static/**"
 		};
 		
 		http.csrf().disable().authorizeRequests()

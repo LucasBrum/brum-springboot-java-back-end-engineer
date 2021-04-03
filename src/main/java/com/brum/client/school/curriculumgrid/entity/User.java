@@ -37,7 +37,7 @@ public class User implements Serializable{
 	private Credential credential = new Credential();
 
 	@ManyToMany
-	@JoinTable(name = "user_has_entries", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+	@JoinTable(name = "tb_user_has_entries", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "entry_id") })
 	@Column(name = "entry")
 	private List<Entry> entries;
