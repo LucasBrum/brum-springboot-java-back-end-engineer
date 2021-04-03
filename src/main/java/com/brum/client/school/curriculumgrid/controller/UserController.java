@@ -21,8 +21,8 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@Autowired
-	private PasswordEncoder pass;
+//	@Autowired
+//	private PasswordEncoder pass;
 	
 	@PostMapping
 	public ResponseEntity<Response<User>> cadastrarUsuario(@RequestBody UserDTO userDto) {
@@ -34,7 +34,7 @@ public class UserController {
 			
 			user.setName(userDto.getName());
 			user.getCredential().setEmail(userDto.getEmail());
-			user.getCredential().setPassword(pass.encode(userDto.getPassword()));
+			//user.getCredential().setPassword(pass.encode(userDto.getPassword()));
 			
 			response.setData(this.userRepository.save(user));
 			

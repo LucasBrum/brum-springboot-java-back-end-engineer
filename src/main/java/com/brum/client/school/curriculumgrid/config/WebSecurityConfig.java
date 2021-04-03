@@ -13,10 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Bean
-	public PasswordEncoder encorder() {
-		return new BCryptPasswordEncoder();
-	}
+//	@Bean
+//	public PasswordEncoder encoder() {
+//		return new BCryptPasswordEncoder();
+//	}
 
 	@Autowired
 	public void globalConfiguration(AuthenticationManagerBuilder auth) throws Exception {
@@ -26,12 +26,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		String[] allowed = new String[] {
-				"/webjars", "/users","/static/**"
-		};
+//		String[] allowed = new String[] {
+//				"/webjars", "/users", "/static/**"
+//		};
 		
 		http.csrf().disable().authorizeRequests()
-			.antMatchers(allowed).permitAll()
+			//.antMatchers(allowed).permitAll()
 			.anyRequest()
 			.authenticated()
 			.and()
