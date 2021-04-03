@@ -77,7 +77,7 @@ public class SubjectControllerIntegratedTest {
 
 	@Test
 	public void testListAllSubjects() {
-		ResponseEntity<Response<List<SubjectDto>>> subjects = restTemplate.withBasicAuth("rasmoo", "rasmoo123")
+		ResponseEntity<Response<List<SubjectDto>>> subjects = restTemplate.withBasicAuth("lucas@gmail.com", "senha123")
 				.exchange(buildURI(), HttpMethod.GET, null,
 				new ParameterizedTypeReference<Response<List<SubjectDto>>>() {
 				});

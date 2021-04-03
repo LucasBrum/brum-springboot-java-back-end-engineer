@@ -3,21 +3,31 @@ package com.brum.client.school.curriculumgrid.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.catalina.authenticator.SpnegoAuthenticator.AuthenticateAction;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.brum.client.school.curriculumgrid.dto.CategoryDTO;
 import com.brum.client.school.curriculumgrid.entity.Category;
+import com.brum.client.school.curriculumgrid.entity.User;
 import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.repository.CategoryRepository;
+import com.brum.client.school.curriculumgrid.repository.UserRepository;
 
+@RestController
+@RequestMapping("/categories")
 public class CategoryController {
 
 	private ModelMapper mapper = new ModelMapper();
@@ -25,14 +35,28 @@ public class CategoryController {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
+	@Autowired
+	private UserRepository userRepository;
+
+	@PostMapping
 	public ResponseEntity<Response<Category>> create(@RequestBody CategoryDTO categoryDto) {
 
 		Response<Category> response = new Response<>();
 
 		try {
+
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+			Optional<User> user = this.userRepository.findByEmail(auth.getName());
+
+			if (!user.isPresent()) {
+				throw new Exception();
+			}
+
 			if (categoryDto != null && categoryDto.getId() == null) {
 				Category category = this.categoryRepository.save(mapper.map(categoryDto, Category.class));
-				response.setData(category);
+				category.setUser(user.get());
+				response.setData(this.categoryRepository.save(category));
 				response.setStatusCode(HttpStatus.CREATED.value());
 
 				return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -45,7 +69,7 @@ public class CategoryController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 		}
 	}
-	
+
 	@PutMapping
 	public ResponseEntity<Response<Category>> atualizarCategoria(@RequestBody CategoryDTO categoryDto) {
 		Response<Category> response = new Response<>();

@@ -103,7 +103,7 @@ public class CourseControllerIntegratedTest {
 	@Test
 	public void testListAllCourses() {
 		ResponseEntity<Response<List<Course>>> courses = restTemplate
-				.withBasicAuth("rasmoo", "$2a$10$RqGILYfa2BFYvw.bMtaMYOeZYYUY5NUOSTIrSb4AXt0rOoll9EQwS")
+				.withBasicAuth("lucas@gmail.com", "senha123")
 				.exchange(buildURI(), HttpMethod.GET, null, new ParameterizedTypeReference<Response<List<Course>>>() {
 				});
 
