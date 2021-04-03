@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.brum.client.school.curriculumgrid.dto.UserDTO;
-import com.brum.client.school.curriculumgrid.entity.Category;
 import com.brum.client.school.curriculumgrid.entity.User;
 import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.repository.UserRepository;

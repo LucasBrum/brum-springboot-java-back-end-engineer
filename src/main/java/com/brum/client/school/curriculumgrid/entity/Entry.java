@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,14 +25,18 @@ public class Entry implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
 	
+	@Column(name = "type")
 	private TypeEnum type;
 	
+	@Column(name = "entry_date")
 	private Date date = new Date();
 	
+	@Column(name = "entry_value")
 	private int value;
 	
 	@OneToOne(cascade = CascadeType.REFRESH)

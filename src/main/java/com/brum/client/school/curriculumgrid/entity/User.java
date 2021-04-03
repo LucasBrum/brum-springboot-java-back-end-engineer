@@ -29,13 +29,16 @@ public class User implements Serializable{
 	private static final long serialVersionUID = 4947066108504508475L;
 
 	@Id
+	@Column(name = "id")
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
 	private Long id;
 	
+	@Column(name = "name")
 	private String name;
 
 	@JsonIgnore
+	@Column(name = "credential")
 	private Credential credential = new Credential();
 
 	@ManyToMany(fetch = FetchType.EAGER)
