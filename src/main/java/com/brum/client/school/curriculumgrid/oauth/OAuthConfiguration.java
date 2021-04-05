@@ -2,7 +2,10 @@ package com.brum.client.school.curriculumgrid.oauth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -11,6 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
 
 @Configuration
 public class OAuthConfiguration {
@@ -30,27 +34,29 @@ public class OAuthConfiguration {
 		
 		@Override
 		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
+			
 			clients.inMemory()
 			.withClient("cliente-web")
-			.secret("$2a$10$K9gbUpAYRBZiwwFmrhfjWexP2Cdplb/.agonY.oo16zl3DNlcPR3S")
-			.authorizedGrantTypes("password")
-			.scopes("read", "write")
-			.accessTokenValiditySeconds(3601)
+			.secret("$2a$10$jElimObdhzQ2jOLBHByrgezZsI8pbnxPfWYX9l5H5uYT/6O1TwQGW")
+			.authorizedGrantTypes("password","client_credentials","refresh_token")
+			.scopes("cw_logged","cw_not_logged")
+			.accessTokenValiditySeconds(121)
 			.resourceIds(RESOURCE_ID)
 			.and()
 			.withClient("cliente-canva")
-			.secret("$2a$10$K9gbUpAYRBZiwwFmrhfjWexP2Cdplb/.agonY.oo16zl3DNlcPR3S")
-			.authorizedGrantTypes("authorization_code")
-			.scopes("read")
+			.secret("$2a$10$jElimObdhzQ2jOLBHByrgezZsI8pbnxPfWYX9l5H5uYT/6O1TwQGW")
+			.authorizedGrantTypes("authorization_code", "implicit")
+			.scopes("cc_logged")
 			.redirectUris("https://www.canva.com/pt_br/")
-			.accessTokenValiditySeconds(20)
-			.resourceIds(RESOURCE_ID);
-			
+			.accessTokenValiditySeconds(3601)
+			.resourceIds(RESOURCE_ID).autoApprove(true);
+		
 		}
 	}
 	
 	@EnableResourceServer
 	public static class ResourceServer extends ResourceServerConfigurerAdapter {
+		
 		@Override
 		public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
 			resources.resourceId(RESOURCE_ID);
@@ -58,11 +64,18 @@ public class OAuthConfiguration {
 		
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests().anyRequest().authenticated()
-			.and()
-			.requestMatchers()
-			.antMatchers("/v2/categories");
+			http.authorizeRequests().anyRequest().authenticated().and().cors();
 		}
+	}
+	
+	@EnableGlobalMethodSecurity(prePostEnabled = true)
+	public static class OAuthExpressionHandler extends GlobalMethodSecurityConfiguration {
+		
+		@Override
+		protected MethodSecurityExpressionHandler createExpressionHandler() {
+			return new OAuth2MethodSecurityExpressionHandler();
+		}
+		
 	}
 	
 }

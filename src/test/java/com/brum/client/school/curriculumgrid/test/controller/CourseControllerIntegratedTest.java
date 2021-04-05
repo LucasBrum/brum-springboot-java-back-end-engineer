@@ -20,6 +20,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.brum.client.school.curriculumgrid.dto.CourseDto;
 import com.brum.client.school.curriculumgrid.entity.Course;
@@ -29,6 +30,7 @@ import com.brum.client.school.curriculumgrid.repository.CourseRepository;
 import com.brum.client.school.curriculumgrid.repository.SubjectRepository;
 import com.brum.client.school.curriculumgrid.test.datafactory.CourseDataFactory;
 
+@ActiveProfiles("test")
 @RunWith(JUnitPlatform.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CourseControllerIntegratedTest {

@@ -9,8 +9,6 @@ import com.brum.client.school.curriculumgrid.entity.User;
 
 public class ResourceOwner implements UserDetails{
 
-	private static final long serialVersionUID = 1L;
-	
 	private User user;
 	
 	public ResourceOwner(User user) {

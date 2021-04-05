@@ -1,7 +1,10 @@
 package com.brum.client.school.curriculumgrid.config;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,11 +13,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import com.brum.client.school.curriculumgrid.dto.UserDTO;
+import com.brum.client.school.curriculumgrid.entity.User;
+import com.brum.client.school.curriculumgrid.model.Response;
+import com.brum.client.school.curriculumgrid.repository.UserRepository;
 import com.brum.client.school.curriculumgrid.service.impl.UserInfoServiceImpl;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	private UserRepository userRepository;
 	
 	@Bean
 	@Override
@@ -34,6 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		
 		String[] allowed = new String[] { 
 			"/webjars", "/users", "/static/**" 
 		};
@@ -48,5 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.and()
 		.httpBasic();
 	}
+	
+	
 
 }
