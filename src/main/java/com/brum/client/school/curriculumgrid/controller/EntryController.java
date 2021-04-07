@@ -27,7 +27,7 @@ import com.brum.client.school.curriculumgrid.service.UserInfoService;
 
 @RestController
 @RequestMapping("/entries")
-@PreAuthorize(value = "#oauth2.hasScope('cw_logged') and hasRole('ROLE_CUSTOMER','ROLE_ADMIN')")
+@PreAuthorize(value = "#oauth2.hasScope('cw_logged') and hasAnyRole('ROLE_CUSTOMER','ROLE_ADMIN')")
 public class EntryController {
 	
 	@Autowired

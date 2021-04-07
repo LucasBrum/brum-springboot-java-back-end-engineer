@@ -50,7 +50,7 @@ public class OAuthConfiguration {
 		}
 		
 		@Bean
-		public ApprovalStore approvaStore() {
+		public ApprovalStore approvalStore() {
 			return new JdbcApprovalStore(this.dataSource);
 		}
 		
@@ -61,7 +61,7 @@ public class OAuthConfiguration {
 			endpoints
 				.authenticationManager(authenticationManager)
 				.requestFactory(requestFactory)
-				.approvalStore(this.approvaStore())
+				.approvalStore(this.approvalStore())
 				.tokenStore(this.tokenStore());
 		}
 		

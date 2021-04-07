@@ -25,8 +25,7 @@ import lombok.Data;
 @Entity
 @Table(name = "tb_entry")
 public class Entry implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2339286987100814160L;
 
 	@Id
 	@Column(name = "id")

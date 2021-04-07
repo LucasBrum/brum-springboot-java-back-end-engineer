@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import com.brum.client.school.curriculumgrid.model.Response;
 import com.brum.client.school.curriculumgrid.repository.UserRepository;
 
 @RestController
+@CrossOrigin
 @RequestMapping(value = "/users")
 @PreAuthorize(value = "#oauth2.hasScope('cw_not_logged')")
 public class UserController {

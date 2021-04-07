@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.brum.client.school.curriculumgrid.repository.UserRepository;
 import com.brum.client.school.curriculumgrid.service.impl.UserInfoServiceImpl;
 
-@Order(2)
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	

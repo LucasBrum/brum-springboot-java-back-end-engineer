@@ -21,8 +21,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "tb_subject")
 public class Subject implements Serializable {
 	
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -1085127535992139037L;
+
 	@Id
 	@JsonInclude(Include.NON_NULL)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

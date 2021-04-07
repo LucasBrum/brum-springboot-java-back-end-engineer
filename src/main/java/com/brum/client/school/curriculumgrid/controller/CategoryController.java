@@ -28,7 +28,7 @@ import com.brum.client.school.curriculumgrid.service.UserInfoService;
 @CrossOrigin
 @RestController
 @RequestMapping("/categories")
-@PreAuthorize(value = "#oauth2.hasScope('cw_logged') and hasRole('ROLE_CUSTOMER')")
+@PreAuthorize(value = "#oauth2.hasScope('cw_logged') and hasAnyRole('ROLE_CUSTOMER', 'ROLE_ADMIN')")
 public class CategoryController {
 
 	private ModelMapper mapper = new ModelMapper();
@@ -91,7 +91,7 @@ public class CategoryController {
 	}
 
 	@GetMapping
-	@PreAuthorize(value = "#oauth2.hasAnyScope('cc_logged','cw_logged') and hasRole('ROLE_CUSTOMER','ROLE_ADMIN')")
+	@PreAuthorize(value = "#oauth2.hasScope('cw_logged') and hasAnyRole('ROLE_CUSTOMER','ROLE_ADMIN')")
 	public ResponseEntity<Response<List<Category>>> listAllCategories() {
 		Response<List<Category>> response = new Response<>();
 		try {
