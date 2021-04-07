@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import com.brum.client.school.curriculumgrid.service.UserInfoService;
 
 @RestController
 @RequestMapping("/entries")
+@PreAuthorize(value = "#oauth2.hasScope('cw_logged') and hasRole('ROLE_CUSTOMER','ROLE_ADMIN')")
 public class EntryController {
 	
 	@Autowired
@@ -38,7 +40,7 @@ public class EntryController {
 	private CategoryRepository categoryRepository;
 
 	@PostMapping
-	public ResponseEntity<Response<Entry>> cadastrarLancamento(@RequestBody EntryDTO entryDto) {
+	public ResponseEntity<Response<Entry>> createEntry(@RequestBody EntryDTO entryDto) {
 		Response<Entry> response = new Response<>();
 		try {
 			
@@ -66,7 +68,7 @@ public class EntryController {
 	}
 
 	@PutMapping
-	public ResponseEntity<Response<Entry>> atualizarLancamento(@RequestBody EntryDTO entryDto) {
+	public ResponseEntity<Response<Entry>> updateEntry(@RequestBody EntryDTO entryDto) {
 		Response<Entry> response = new Response<>();
 		try {
 			User user = this.userInfoService.getAuthenticatedUser();
@@ -93,6 +95,7 @@ public class EntryController {
 	}
 
 	@GetMapping
+	@PreAuthorize(value = "#oauth2.hasAnyScope('cc_logged','cw_logged')")
 	public ResponseEntity<Response<List<Entry>>> listEntries() {
 		Response<List<Entry>> response = new Response<>();
 		try {
@@ -110,7 +113,8 @@ public class EntryController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Response<Entry>> consultarLancamento(@PathVariable("id") long id) {
+	@PreAuthorize(value = "#oauth2.hasAnyScope('cc_logged','cw_logged')")
+	public ResponseEntity<Response<Entry>> consultEntry(@PathVariable("id") long id) {
 		Response<Entry> response = new Response<>();
 		try {
 			Optional<Entry> entry = this.entryRepository.findById(id);

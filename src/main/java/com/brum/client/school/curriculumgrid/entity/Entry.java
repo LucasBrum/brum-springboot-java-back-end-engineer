@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -45,7 +46,7 @@ public class Entry implements Serializable{
 	@OneToOne(cascade = CascadeType.REFRESH)
 	private Category category = new Category();
 	
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 }

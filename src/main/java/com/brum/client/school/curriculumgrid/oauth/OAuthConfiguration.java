@@ -1,6 +1,10 @@
 package com.brum.client.school.curriculumgrid.oauth;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,7 +18,13 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.approval.ApprovalStore;
+import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;
+import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 @Configuration
 public class OAuthConfiguration {
@@ -25,32 +35,39 @@ public class OAuthConfiguration {
 	public static class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 		
 		@Autowired
+		private ClientDetailsService clientDetailsService;
+		
+		@Autowired
 		private AuthenticationManager authenticationManager;
+		
+		@Autowired
+		@Qualifier("dsOAuth") //Aponta para o datasource criado em DataBaseConfiguration
+		private DataSource dataSource;
+		
+		@Bean
+		public TokenStore tokenStore() {
+			return new JdbcTokenStore(this.dataSource);
+		}
+		
+		@Bean
+		public ApprovalStore approvaStore() {
+			return new JdbcApprovalStore(this.dataSource);
+		}
 		
 		@Override
 		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-			endpoints.authenticationManager(authenticationManager);
+			DefaultOAuth2RequestFactory requestFactory = new DefaultOAuth2RequestFactory(clientDetailsService);
+			requestFactory.setCheckUserScopes(Boolean.TRUE);
+			endpoints
+				.authenticationManager(authenticationManager)
+				.requestFactory(requestFactory)
+				.approvalStore(this.approvaStore())
+				.tokenStore(this.tokenStore());
 		}
 		
 		@Override
 		public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-			
-			clients.inMemory()
-			.withClient("cliente-web")
-			.secret("$2a$10$jElimObdhzQ2jOLBHByrgezZsI8pbnxPfWYX9l5H5uYT/6O1TwQGW")
-			.authorizedGrantTypes("password","client_credentials","refresh_token")
-			.scopes("cw_logged","cw_not_logged")
-			.accessTokenValiditySeconds(121)
-			.resourceIds(RESOURCE_ID)
-			.and()
-			.withClient("cliente-canva")
-			.secret("$2a$10$jElimObdhzQ2jOLBHByrgezZsI8pbnxPfWYX9l5H5uYT/6O1TwQGW")
-			.authorizedGrantTypes("authorization_code", "implicit")
-			.scopes("cc_logged")
-			.redirectUris("https://www.canva.com/pt_br/")
-			.accessTokenValiditySeconds(3601)
-			.resourceIds(RESOURCE_ID).autoApprove(true);
-		
+			clients.jdbc(this.dataSource); //Todas as informações do clients vão vir do DataSource
 		}
 	}
 	

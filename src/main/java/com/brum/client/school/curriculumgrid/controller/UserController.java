@@ -32,7 +32,7 @@ public class UserController {
 	private PasswordEncoder pass;
 
 	@PostMapping
-	public ResponseEntity<Response<User>> cadastrarUsuario(@RequestBody UserDTO userDto) {
+	public ResponseEntity<Response<User>> createUser(@RequestBody UserDTO userDto) {
 		Response<User> response = new Response<>();
 
 		try {
@@ -57,7 +57,8 @@ public class UserController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Response<List<User>>> listar() {
+	@PreAuthorize(value = "#oauth2.hasScope('cw_logged') and hasRole('ROLE_ADMIN')")
+	public ResponseEntity<Response<List<User>>> listAllUsers() {
 		Response<List<User>> response = new Response<>();
 		try {
 			response.setData(this.userRepository.findAll());

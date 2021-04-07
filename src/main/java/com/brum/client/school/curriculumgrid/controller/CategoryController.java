@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,8 @@ import com.brum.client.school.curriculumgrid.service.UserInfoService;
 
 @CrossOrigin
 @RestController
-@RequestMapping({"/categories","/v2/categories"})
+@RequestMapping("/categories")
+@PreAuthorize(value = "#oauth2.hasScope('cw_logged') and hasRole('ROLE_CUSTOMER')")
 public class CategoryController {
 
 	private ModelMapper mapper = new ModelMapper();
@@ -89,6 +91,7 @@ public class CategoryController {
 	}
 
 	@GetMapping
+	@PreAuthorize(value = "#oauth2.hasAnyScope('cc_logged','cw_logged') and hasRole('ROLE_CUSTOMER','ROLE_ADMIN')")
 	public ResponseEntity<Response<List<Category>>> listAllCategories() {
 		Response<List<Category>> response = new Response<>();
 		try {
@@ -105,6 +108,7 @@ public class CategoryController {
 	}
 
 	@GetMapping("/{id}")
+	@PreAuthorize(value = "#oauth2.hasAnyScope('cc_logged','cw_logged') and hasRole('ROLE_CUSTOMER','ROLE_ADMIN')")
 	public ResponseEntity<Response<Category>> consultCategory(@PathVariable Long id) {
 		Response<Category> response = new Response<>();
 		try {

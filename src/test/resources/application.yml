@@ -1,10 +1,11 @@
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
+    driverClassName: org.h2.Driver
     url: jdbc:h2:mem:testbrumdb
     username: brum
-    password: brum
-    
-  jpa:    database-platform: org.hibernate.dialect.H2Dialect
-  h2:    console:      enabled: true
-  autoconfigure:    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+    password: brum  
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true

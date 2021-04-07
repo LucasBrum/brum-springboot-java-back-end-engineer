@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class CurriculumGridApplicationTests {
+	
 	@Autowired
 	private PasswordEncoder pass;
 
