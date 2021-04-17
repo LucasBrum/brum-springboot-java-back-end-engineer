@@ -2,7 +2,6 @@ package com.brum.client.school.curriculumgrid.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,17 +11,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.brum.client.school.curriculumgrid.repository.UserRepository;
 import com.brum.client.school.curriculumgrid.service.impl.UserInfoServiceImpl;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-	@Autowired
-	private UserRepository userRepository;
-	
 	@Bean
-	@Override
+	@Override	
 	protected AuthenticationManager authenticationManager() throws Exception {
 		return super.authenticationManager();
 	}
